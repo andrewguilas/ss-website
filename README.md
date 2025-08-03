@@ -9,7 +9,7 @@
 - [x] Parse orders in CSV API
 - [x] View orders API
 - [x] Auto-generate default route for orders & default truck for routes
-- [ ] Create tests for error-handling
+- [x] Create tests for error-handling. Update: Could not create tests for routers.
 - [ ] Ensure logging covers all critical flows & errors
 - [ ] Update docs for using API
 - [ ] Prep for next phase
