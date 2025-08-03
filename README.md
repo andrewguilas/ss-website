@@ -7,10 +7,11 @@
 - [x] 1.2: Set up database
 - [x] 1.3: Upload CSV API
 - [x] 1.4: Parse orders in CSV API
-- [ ] 1.5: View orders API
-- [ ] 1.6: Config & Environment
-- [ ] 1.7: Error Handling & Logging
-- [ ] 1.8 Alembic for Migrations
+- [x] 1.5: View orders API
+- [x] 1.6 Auto-generate default route for orders & default truck for routes
+- [ ] 1.7: Config & Environment
+- [ ] 1.8: Error Handling & Logging
+- [ ] 1.9 Alembic for Migrations
 
 ### Phase 2 – Web UI / Frontend
 
@@ -24,6 +25,10 @@
 ## To Setup
 
 ## To Run
+
+```
+uvicorn app.main:app --reload   
+```
 
 ## Notes
 
