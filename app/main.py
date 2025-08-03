@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from app.database import Base, engine
 from app.models import order, route, truck
-from app.routers import upload
+from app.routers import upload, read
 import logging
 
 app = FastAPI()
@@ -9,6 +9,7 @@ app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
 app.include_router(upload.router, prefix="/api")
+app.include_router(read.router, prefix="/api")
 
 logging.basicConfig(
     level=logging.WARNING,

@@ -2,7 +2,7 @@ import csv
 from io import StringIO
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.order import Order
 from app.utils.parsing import parse_int, parse_location, parse_phone, parse_date
 from app.utils.openai import ask_openai
@@ -27,13 +27,6 @@ def get_comments(dropoff_proxy_name=None, dropoff_proxy_phone=None):
         dropoff_proxy_phone = parse_phone(dropoff_proxy_phone)
         comments.append(f"Call Proxy {dropoff_proxy_name} at {dropoff_proxy_phone}.")
     return "\n".join(comments)
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post("/upload-orders")
 async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_db)):
