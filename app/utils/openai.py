@@ -7,4 +7,7 @@ load_dotenv()
 client = OpenAI()
 
 def ask_openai(input):
-    return client.responses.create(model=OPENAI_MODEL, input=input).output_text
+    try:
+        return client.responses.create(model=OPENAI_MODEL, input=input).output_text
+    except Exception:
+        return None
