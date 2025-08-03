@@ -25,3 +25,20 @@
 ## To Setup
 
 ## To Run
+
+## Notes
+
+### Commit Guide
+| Type | Purpose |
+| ----- | ----- |
+| feat | A new feature |
+| fix | A bug fix |
+| refactor | Code change that neither fixes a bug nor adds a feature |
+| docs | Documentation only |
+| style | Code formatting only (e.g., black, prettier) |
+| test | Adding or updating tests |
+| chore | Dev tool changes, config updates, deps — not user-facing behavior |
+| perf | Performance improvements |
+| ci | CI/CD pipeline changes |
+| build | Changes to build scripts, Docker, etc. |
+| revert | Reverts a previous commit |
