@@ -15,13 +15,13 @@ def create_order(db: Session, order_data: dict) -> Order:
     if dropoff_date:
         route = db.query(Route).filter(Route.date == dropoff_date).order_by(Route.id).first()
         if route:
-            logger.debug(f"Auto-assigned route {route.id} to order {order_data["id"]}.")
+            logger.debug(f"Auto-assigned route {route.id} to order {order_data['id']}.")
         else:
             route = create_route(db, dropoff_date)
             db.add(route)
             db.commit()
             db.refresh(route)
-            logger.debug(f"No route exists for date {dropoff_date}. Auto-generated and auto-assigned route {route.id} to order {order_data["id"]}.")
+            logger.debug(f"No route exists for date {dropoff_date}. Auto-generated and auto-assigned route {route.id} to order {order_data['id']}.")
     else:
         logger.debug(f"Order {order_data['id']} has no dropoff date; skipping route assignment.")
 
