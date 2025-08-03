@@ -2,18 +2,19 @@
 
 ## TODO
 
-### Phase 1 – Core Backend & CSV Upload
-- [x] 1.1: Initialize project
-- [x] 1.2: Set up database
-- [x] 1.3: Upload CSV API
-- [x] 1.4: Parse orders in CSV API
-- [x] 1.5: View orders API
-- [x] 1.6 Auto-generate default route for orders & default truck for routes
-- [ ] 1.7: Config & Environment
-- [ ] 1.8: Error Handling & Logging
-- [ ] 1.9 Alembic for Migrations
+### Phase 1 – Core Backend & CSV Upload (due 8/3)
+- [x] Initialize project
+- [x] Set up database
+- [x] Upload CSV API
+- [x] Parse orders in CSV API
+- [x] View orders API
+- [x] Auto-generate default route for orders & default truck for routes
+- [ ] Create tests for error-handling
+- [ ] Ensure logging covers all critical flows & errors
+- [ ] Update docs for using API
+- [ ] Prep for next phase
 
-### Phase 2 – Web UI / Frontend
+### Phase 2 – Web UI / Frontend (due 8/6)
 
 ### Phase 3 – Maps Integration
 
