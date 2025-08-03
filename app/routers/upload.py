@@ -6,10 +6,12 @@ from app.database import SessionLocal
 from app.models.order import Order
 from app.utils.parsing import parse_int, parse_location, parse_phone, parse_date
 from app.utils.openai import ask_openai
+import logging
 
 CAMPUS = "University of Virginia"
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 def fetch_pronunciation(full_name):
     first_name = full_name.split(" ")[0]
@@ -43,7 +45,7 @@ async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_
 
     inserted_count = 0
     for row in reader:
-        if not row.get("campus") or row.get("campus") != CAMPUS or not row.get("orders") or row.get("orders") == 0:
+        if not row.get("CampusName") or row.get("CampusName") != CAMPUS or not row.get("ItemCount") or row.get("ItemCount") == 0:
             continue
 
         try:
@@ -67,13 +69,14 @@ async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_
                 route_id=row.get("route_id")
             )
 
+            logger.debug(f"Inserting order {order.id} - Student {order.name}")
             db.add(order)
             inserted_count += 1
-
         except Exception as e:
-            print(f"Skipping rows due to error: {e}")
+            logger.warning(f"Skipping rows due to error: {e}")
             continue
 
     db.commit()
+    logger.info(f"Inserted {inserted_count} orders from {file.filename}")
     return {"inserted": inserted_count}
 
