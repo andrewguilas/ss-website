@@ -22,13 +22,22 @@
 
 ### Phase 5 – Mobile Optimization
 
-
 ## To Setup
+
+```
+pip install -r requirements.txt
+```
 
 ## To Run
 
 ```
 uvicorn app.main:app --reload   
+```
+
+## To Test
+
+```
+pytest -v
 ```
 
 ## Notes
