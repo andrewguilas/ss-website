@@ -11,7 +11,7 @@ Base.metadata.create_all(bind=engine)
 app.include_router(upload.router, prefix="/api")
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.WARNING,
     format="%(asctime)s [%(levelname)s] %(message)s",
 )
 logger = logging.getLogger(__name__)

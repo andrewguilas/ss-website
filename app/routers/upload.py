@@ -7,6 +7,7 @@ from app.models.order import Order
 from app.utils.parsing import parse_int, parse_location, parse_phone, parse_date
 from app.utils.openai import ask_openai
 import logging
+from alive_progress import alive_bar
 
 CAMPUS = "University of Virginia"
 
@@ -41,40 +42,42 @@ async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_
     
     content = await file.read()
     decoded = content.decode("utf-8")
-    reader = csv.DictReader(StringIO(decoded))
-
+    rows = list(csv.DictReader(StringIO(decoded)))
     inserted_count = 0
-    for row in reader:
-        if not row.get("CampusName") or row.get("CampusName") != CAMPUS or not row.get("ItemCount") or row.get("ItemCount") == 0:
-            continue
 
-        try:
-            order = Order(
-                id=parse_int(row.get("OrderID")),
-                campus=row.get("CampusName"),
-                name=row.get("FullName"),
-                phone=parse_phone(row.get("StudentPhone")) if row.get("StudentPhone") else None,
-                pronunciation=fetch_pronunciation(row.get("FullName")) if row.get("FullName") else None,
-                comments=get_comments(dropoff_proxy_name=row.get("DropoffPersonName"), dropoff_proxy_phone=row.get("DropoffPersonProxy")),
-                pickup_date=parse_date(row.get("PickupDate")),
-                pickup_location=parse_location(row.get("PickupLocation"), row.get("PickupDormRoomNumber"), row.get("PickupDormRoomLetter"), row.get("PickupAddress"), row.get("PickupAddressLine2")),
-                pickup_proxy_name=row.get("PickupPersonName"),
-                pickup_proxy_phone=row.get("PickupPersonPhone"),
-                dropoff_date=parse_date(row.get("DropoffDate")),
-                dropoff_location=parse_location(row.get("DropOffLocation"), row.get("DropOffDormRoomNumber"), row.get("DropOffDormRoomLetter"), row.get("DropoffAddressLine1"), row.get("DropoffAddressLine2")),
-                dropoff_proxy_name=row.get("DropoffPersonName"),
-                dropoff_proxy_phone=row.get("DropoffPersonProxy"),
-                item_count=parse_int(row.get("ItemCount")) if row.get("ItemCount") else None,
-                items="",
-                route_id=row.get("route_id")
-            )
+    with alive_bar(len(rows), title="Processing orders") as bar:    
+        for row in rows:
+            if not row.get("CampusName") or row.get("CampusName") != CAMPUS or not row.get("ItemCount") or row.get("ItemCount") == 0:
+                continue
 
-            logger.debug(f"Inserting order {order.id} - Student {order.name}")
-            db.add(order)
-            inserted_count += 1
-        except Exception as e:
-            logger.warning(f"Skipping rows due to error: {e}")
-            continue
+            try:
+                order = Order(
+                    id=parse_int(row.get("OrderID")),
+                    campus=row.get("CampusName"),
+                    name=row.get("FullName"),
+                    phone=parse_phone(row.get("StudentPhone")) if row.get("StudentPhone") else None,
+                    pronunciation=fetch_pronunciation(row.get("FullName")) if row.get("FullName") else None,
+                    comments=get_comments(dropoff_proxy_name=row.get("DropoffPersonName"), dropoff_proxy_phone=row.get("DropoffPersonProxy")),
+                    pickup_date=parse_date(row.get("PickupDate")),
+                    pickup_location=parse_location(row.get("PickupLocation"), row.get("PickupDormRoomNumber"), row.get("PickupDormRoomLetter"), row.get("PickupAddress"), row.get("PickupAddressLine2")),
+                    pickup_proxy_name=row.get("PickupPersonName"),
+                    pickup_proxy_phone=row.get("PickupPersonPhone"),
+                    dropoff_date=parse_date(row.get("DropoffDate")),
+                    dropoff_location=parse_location(row.get("DropOffLocation"), row.get("DropOffDormRoomNumber"), row.get("DropOffDormRoomLetter"), row.get("DropoffAddressLine1"), row.get("DropoffAddressLine2")),
+                    dropoff_proxy_name=row.get("DropoffPersonName"),
+                    dropoff_proxy_phone=row.get("DropoffPersonProxy"),
+                    item_count=parse_int(row.get("ItemCount")) if row.get("ItemCount") else None,
+                    items="",
+                    route_id=row.get("route_id")
+                )
+
+                logger.debug(f"Inserting order {order.id} - Student {order.name}")
+                db.add(order)
+                inserted_count += 1
+                bar()
+            except Exception as e:
+                logger.warning(f"Skipping rows due to error: {e}")
+                continue
 
     db.commit()
     logger.info(f"Inserted {inserted_count} orders from {file.filename}")
