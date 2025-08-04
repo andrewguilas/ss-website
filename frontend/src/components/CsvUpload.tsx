@@ -1,18 +1,23 @@
 import { useState } from "react"
 
-export default function CsvUpload() {
+function CsvUpload() {
   const [file, setFile] = useState<File | null>(null)
-  const [message, setMessage] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [clearDB, setClearDB] = useState(false)
 
-  async function handleUpload() {
-    if (!file) {
-      setMessage("Please select a CSV file first.")
-      return
+  const handleUpload = async () => {
+    if (!file) return alert("Please select a file")
+
+    if (clearDB) {
+      try {
+        await fetch("http://localhost:8000/clear-database", {
+          method: "DELETE",
+        })
+        alert("Database cleared.")
+      } catch (err) {
+        alert("Failed to clear database.")
+        return
+      }
     }
-
-    setLoading(true)
-    setMessage(null)
 
     const formData = new FormData()
     formData.append("file", file)
@@ -23,39 +28,44 @@ export default function CsvUpload() {
         body: formData,
       })
 
-      if (!res.ok) {
-        throw new Error(`Upload failed with status ${res.status}`)
-      }
-
-      const data = await res.json()
-      setMessage(`Upload successful! Inserted: ${data.inserted}, Skipped: ${data.skipped}`)
-    } catch (error: any) {
-      setMessage(`Upload failed: ${error.message}`)
-    } finally {
-      setLoading(false)
+      const json = await res.json()
+      alert(`Inserted ${json.inserted} orders. Skipped ${json.skipped}.`)
+    } catch (err) {
+      alert("Upload failed.")
     }
   }
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-semibold mb-4">Upload Orders CSV</h2>
+    <div className="p-4 border rounded-lg bg-white shadow">
+      <h2 className="text-xl font-semibold mb-2">Upload CSV</h2>
+
+      <div className="mb-2">
+        <label className="inline-flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={clearDB}
+            onChange={(e) => setClearDB(e.target.checked)}
+          />
+          Clear database before upload
+        </label>
+      </div>
 
       <input
         type="file"
         accept=".csv"
         onChange={(e) => setFile(e.target.files?.[0] || null)}
-        className="mb-4"
+        className="mb-2"
       />
-
+      
       <button
         onClick={handleUpload}
-        disabled={loading}
-        className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
       >
-        {loading ? "Uploading..." : "Upload"}
+        Upload
       </button>
 
-      {message && <p className="mt-4">{message}</p>}
     </div>
   )
 }
+
+export default CsvUpload

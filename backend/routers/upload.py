@@ -7,6 +7,8 @@ from alive_progress import alive_bar
 
 from backend.database import get_db
 from backend.models.order import Order
+from backend.models.route import Route
+from backend.models.truck import Truck
 from backend.utils.parsing import parse_int, parse_location, parse_phone, parse_date
 from backend.utils.openai import ask_openai
 from backend.services.order_service import create_order
@@ -68,7 +70,7 @@ async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_
                     "name": row.get("FullName"),
                     "phone": parse_phone(row.get("StudentPhone")) if row.get("StudentPhone") else None,
                     "pronunciation": fetch_pronunciation(row.get("FullName")) if row.get("FullName") else None,
-                    "comments": get_comments(dropoff_proxy_name=row.get("DropoffPersonName"), dropoff_proxy_phone=row.get("DropoffPersonProxy")),
+                    "comments": get_comments(dropoff_proxy_name=row.get("DropoffPersonName"), dropoff_proxy_phone=row.get("DropoffPersonPhone")),
                     "pickup_date": parse_date(row.get("PickupDate")),
                     "pickup_location": parse_location(
                         row.get("PickupLocation"), row.get("PickupDormRoomNumber"),
@@ -105,3 +107,18 @@ async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_
         "inserted": inserted_count, 
         "skipped": skipped_count
     }
+
+@router.delete("/clear-database")
+def clear_database(db: Session = Depends(get_db)):
+    try:
+        db.query(Order).delete()
+        db.query(Route).delete()
+        db.query(Truck).delete()
+        db.commit()
+        logger.warning("Database was cleared via /clear-database endpoint.")
+        return {"message": "Database cleared"}
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Failed to clear database: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Failed to clear database")
+
