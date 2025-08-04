@@ -1,9 +1,14 @@
-function App() {
+type AppProps = {
+  children: React.ReactNode
+}
+
+export default function App({ children }: AppProps) {
   return (
-    <div className="h-screen flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-blue-600">SS Dashboard</h1>
+    <div className="min-h-screen flex flex-col">
+      <header className="bg-blue-600 text-white p-4 text-center font-bold text-xl">
+        SS Dashboard
+      </header>
+      <main className="flex-grow">{children}</main>
     </div>
   )
 }
-
-export default App
