@@ -81,14 +81,12 @@ OPENAI_API_KEY=
 
 #### 1. In terminal 1 (backend)
 ```
-> cd backend
 > uvicorn main:app --reload
 ```
 
 #### 2. In terminal 2 (frontend)
 ```
-> cd frontend
-> npm run dev
+> npm run frontend
 ```
 
 ---
@@ -97,7 +95,6 @@ OPENAI_API_KEY=
 
 #### 1. In terminal 1 (backend)
 ```
-> cd backend
 > pytest -v
 ```
 
