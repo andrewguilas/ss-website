@@ -1,14 +1,20 @@
-type AppProps = {
-  children: React.ReactNode
-}
+import { Routes, Route, Navigate } from "react-router-dom"
+import Layout from "./components/Layout"
+import Orders from "./pages/Orders"
+import RoutesPage from "./pages/Routes"
+import Trucks from "./pages/Trucks"
 
-export default function App({ children }: AppProps) {
+function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-blue-600 text-white p-4 text-center font-bold text-xl">
-        SS Dashboard
-      </header>
-      <main className="flex-grow">{children}</main>
-    </div>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Navigate to="/orders" replace />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/routes" element={<RoutesPage />} />
+        <Route path="/trucks" element={<Trucks />} />
+      </Route>
+    </Routes>
   )
 }
+
+export default App
