@@ -7,6 +7,7 @@ export default function Layout() {
         <Link to="/orders" className="hover:underline">Orders</Link>
         <Link to="/routes" className="hover:underline">Routes</Link>
         <Link to="/trucks" className="hover:underline">Trucks</Link>
+        <Link to="/upload" className="hover:underline">Upload</Link>
       </nav>
       <main className="p-6">
         <Outlet />

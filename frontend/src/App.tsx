@@ -3,6 +3,7 @@ import Layout from "./components/Layout"
 import Orders from "./pages/Orders"
 import RoutesPage from "./pages/Routes"
 import Trucks from "./pages/Trucks"
+import CsvUploadPage from "./pages/CsvUploadPage"
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/orders" element={<Orders />} />
         <Route path="/routes" element={<RoutesPage />} />
         <Route path="/trucks" element={<Trucks />} />
+        <Route path="/upload" element={<CsvUploadPage />} />
       </Route>
     </Routes>
   )
