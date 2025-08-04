@@ -45,8 +45,8 @@ export default function Orders() {
   if (error) return <div className="p-4 text-red-600">Error: {error}</div>
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">Orders</h2>
+    <div className="p-6">
+      <h1 className="text-2xl font-semibold mb-4">Orders</h1>
       {orders.length === 0 ? (
         <div>No orders found.</div>
       ) : (
