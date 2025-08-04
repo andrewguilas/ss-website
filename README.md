@@ -27,30 +27,41 @@
 
 ### To Set Up
 
-1. Install libraries
-
+#### 1. In terminal 1 (backend)
+1.1 Create `/backend/.env`
 ```
+# /backend/.env
+OPENAI_API_KEY=
+```
+
+1.2 Install libraries
+```
+> cd backend
+> python -m venv .venv
+> ./venv/Scripts/activate
 > pip install -r requirements.txt
 ```
 
-2. Add secrets
-
+#### 2. In terminal 2 (frontend)
+2.1 Install libraries
 ```
-# /.env
-OPENAI_API_KEY=
+> cd frontend
+> npm install
 ```
 
 ---
 
 ### To Run
 
+#### 1. In terminal 1 (backend)
 ```
-> uvicorn app.main:app --reload
+> cd backend
+> uvicorn main:app --reload
 ```
 
-In another terminal:
-
+#### 2. In terminal 2 (frontend)
 ```
+> cd frontend
 > npm run dev
 ```
 
@@ -58,16 +69,20 @@ In another terminal:
 
 ### To Test
 
+#### 1. In terminal 1 (backend)
 ```
+> cd backend
 > pytest -v
+```
+
+#### 2. In terminal 2 (frontend)
+```
+TBD
 ```
 
 ---
 
 ## SECTION 3: API DOCUMENTATION
-
-### Base URL
-`/api`
 
 ### Endpoints
 
