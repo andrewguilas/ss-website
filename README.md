@@ -14,12 +14,38 @@
 - [x] Update docs for using API
 
 ### Phase 2 – Frontend (due 8/6)
+- [ ] Show orders, routes, & trucks in table
+- [ ] Upload .csv of raw order list
+- [ ] Style website
+- [ ] Edit orders
+  - [ ] Edit order details
+  - [ ] Assign a route to an order
+- [ ] Edit routes
+  - [ ] Add routes
+  - [ ] Edit routes
+  - [ ] Delete routes
+  - [ ] Assign a truck to a route
+  - [ ] Reorder orders within a route
+- [ ] Edit trucks
+  - [ ] Add trucks
+  - [ ] Edit trucks
+  - [ ] Delete trucks
 
 ### Phase 3 – Order Photos
+- [ ] Separate app to connect to storagescholars.com
+  - [ ] Pull orders from website
+  - [ ] Download order photos
+  - [ ] Set up AWS to save photos (if needed)
+- [ ] Bridge ss-website.com and storagescholars.com
+  - [ ] Match each order
+  - [ ] Add photos for each order
 
 ### Phase 4 – Map Integration
+- [ ] Show map of all the orders in a route
 
 ### Phase 5 – Mobile Optimization
+- [ ] Host website on Heroku
+- [ ] Add support for mobile website
 
 ---
 
