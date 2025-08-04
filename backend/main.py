@@ -8,7 +8,8 @@ from backend.routers import upload, read
 
 app = FastAPI()
 
-Base.metadata.create_all(bind=engine)
+if __name__ == "__main__":
+    Base.metadata.create_all(bind=engine)
 
 app.include_router(upload.router)
 app.include_router(read.router)
