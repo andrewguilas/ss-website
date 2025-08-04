@@ -1,7 +1,18 @@
 from fastapi import FastAPI
+from app.database import Base, engine
+from app.models import order, route, truck
+from app.routers import upload, read
+import logging
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"message": "App backend is up"}
+Base.metadata.create_all(bind=engine)
+
+app.include_router(upload.router, prefix="/api")
+app.include_router(read.router, prefix="/api")
+
+logging.basicConfig(
+    level=logging.WARNING,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+logger = logging.getLogger(__name__)
