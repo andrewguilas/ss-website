@@ -47,7 +47,7 @@ export default function Routes() {
                 <td className="border px-4 py-2">{route.id}</td>
                 <td className="border px-4 py-2">{route.date}</td>
                 <td className="border px-4 py-2">{route.driver_name}</td>
-                <td className="border px-4 py-2">{route.comments}</td>
+                <td className="border px-4 py-2 whitespace-pre-wrap">{route.comments}</td>
                 <td className="border px-4 py-2">{route.truck_id}</td>
               </tr>
             ))}

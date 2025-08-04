@@ -80,7 +80,7 @@ export default function Orders() {
                 <td className="border border-gray-300 p-2">{order.name}</td>
                 <td className="border border-gray-300 p-2">{order.phone}</td>
                 <td className="border border-gray-300 p-2">{order.pronunciation}</td>
-                <td className="border border-gray-300 p-2">{order.comments}</td>
+                <td className="border border-gray-300 p-2 whitespace-pre-wrap">{order.comments}</td>
                 <td className="border border-gray-300 p-2">{order.pickup_date}</td>
                 <td className="border border-gray-300 p-2">{order.pickup_location}</td>
                 <td className="border border-gray-300 p-2">{order.pickup_proxy_name}</td>
@@ -90,7 +90,7 @@ export default function Orders() {
                 <td className="border border-gray-300 p-2">{order.dropoff_proxy_name}</td>
                 <td className="border border-gray-300 p-2">{order.dropoff_proxy_phone}</td>
                 <td className="border border-gray-300 p-2">{order.item_count}</td>
-                <td className="border border-gray-300 p-2">{order.items}</td>
+                <td className="border border-gray-300 p-2 whitespace-pre-wrap">{order.items}</td>
                 <td className="border border-gray-300 p-2">{order.route_id}</td>
               </tr>
             ))}
