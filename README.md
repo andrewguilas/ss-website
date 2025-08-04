@@ -11,8 +11,7 @@
 - [x] Auto-generate default route for orders & default truck for routes
 - [x] Create tests for error-handling. Update: Could not create tests for routers.
 - [x] Ensure logging covers all critical flows & errors
-- [ ] Update docs for using API
-- [ ] Prep for next phase
+- [x] Update docs for using API
 
 ### Phase 2 – Frontend (due 8/6)
 
@@ -28,8 +27,17 @@
 
 ### To Set Up
 
+1. Install libraries
+
 ```
-pip install -r requirements.txt
+> pip install -r requirements.txt
+```
+
+2. Add secrets
+
+```
+# /.env
+OPENAI_API_KEY=
 ```
 
 ---
@@ -37,7 +45,7 @@ pip install -r requirements.txt
 ### To Run
 
 ```
-uvicorn app.main:app --reload   
+> uvicorn app.main:app --reload   
 ```
 
 ---
@@ -45,7 +53,7 @@ uvicorn app.main:app --reload
 ### To Test
 
 ```
-pytest -v
+> pytest -v
 ```
 
 ---
