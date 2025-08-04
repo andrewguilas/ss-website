@@ -45,7 +45,13 @@ OPENAI_API_KEY=
 ### To Run
 
 ```
-> uvicorn app.main:app --reload   
+> uvicorn app.main:app --reload
+```
+
+In another terminal:
+
+```
+> npm run dev
 ```
 
 ---

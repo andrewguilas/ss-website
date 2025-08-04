@@ -13,6 +13,26 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Date
+# Data
 *.db
 *.csv
+
+# Node modules
+node_modules/
+
+# Vite build output
+dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables (if any)
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
