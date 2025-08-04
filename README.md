@@ -22,7 +22,7 @@
 
 ### Phase 5 – Mobile Optimization
 
-## To Setup
+## To Set Up
 
 ```
 pip install -r requirements.txt

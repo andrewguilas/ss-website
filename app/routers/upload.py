@@ -42,32 +42,49 @@ async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_
 
     with alive_bar(len(rows), title="Processing orders") as bar:    
         for row in rows:
-            if not row.get("CampusName") or row.get("CampusName") != CAMPUS or not row.get("ItemCount") or row.get("ItemCount") == 0:
+            campus = (row.get("CampusName") or "").strip()
+            item_count_str = row.get("ItemCount")
+            item_count = parse_int(item_count_str) if item_count_str else 0
+
+            if campus != CAMPUS or item_count == 0:
+                logger.debug(f"Skipping order with campus '{campus}' and item_count {item_count}.")
                 skipped_count += 1
+                bar()
                 continue
 
+            order_id = parse_int(row.get("OrderID"))
             try:
-                existing = db.query(Order).filter(Order.id == parse_int(row.get("OrderID"))).first()
+                existing = db.query(Order).filter(Order.id == order_id).first()
                 if existing:
                     logger.warning(f"Order with id {existing.id} already exists, skipping.")
+                    skipped_count += 1
+                    bar()
                     continue
 
                 order = create_order(db, {
-                    "id": parse_int(row.get("OrderID")),
-                    "campus": row.get("CampusName"),
+                    "id": order_id,
+                    "campus": campus,
                     "name": row.get("FullName"),
                     "phone": parse_phone(row.get("StudentPhone")) if row.get("StudentPhone") else None,
                     "pronunciation": fetch_pronunciation(row.get("FullName")) if row.get("FullName") else None,
                     "comments": get_comments(dropoff_proxy_name=row.get("DropoffPersonName"), dropoff_proxy_phone=row.get("DropoffPersonProxy")),
                     "pickup_date": parse_date(row.get("PickupDate")),
-                    "pickup_location": parse_location(row.get("PickupLocation"), row.get("PickupDormRoomNumber"), row.get("PickupDormRoomLetter"), row.get("PickupAddress"), row.get("PickupAddressLine2")),
+                    "pickup_location": parse_location(
+                        row.get("PickupLocation"), row.get("PickupDormRoomNumber"),
+                        row.get("PickupDormRoomLetter"), row.get("PickupAddress"),
+                        row.get("PickupAddressLine2")
+                    ),
                     "pickup_proxy_name": row.get("PickupPersonName"),
                     "pickup_proxy_phone": row.get("PickupPersonPhone"),
                     "dropoff_date": parse_date(row.get("DropoffDate")),
-                    "dropoff_location": parse_location(row.get("DropOffLocation"), row.get("DropOffDormRoomNumber"), row.get("DropOffDormRoomLetter"), row.get("DropoffAddressLine1"), row.get("DropoffAddressLine2")),
+                    "dropoff_location": parse_location(
+                        row.get("DropOffLocation"), row.get("DropOffDormRoomNumber"),
+                        row.get("DropOffDormRoomLetter"), row.get("DropoffAddressLine1"),
+                        row.get("DropoffAddressLine2")
+                    ),
                     "dropoff_proxy_name": row.get("DropoffPersonName"),
                     "dropoff_proxy_phone": row.get("DropoffPersonProxy"),
-                    "item_count": parse_int(row.get("ItemCount")) if row.get("ItemCount") else None,
+                    "item_count": item_count,
                     "items": "",
                 })
 
@@ -75,14 +92,15 @@ async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_
                 inserted_count += 1
                 bar()
             except Exception as e:
-                logger.warning(f"Skipping rows due to error: {e}")
+                logger.warning(f"Skipping order ID {order_id} due to error: {e}", exc_info=True)
                 db.rollback()
+                skipped_count += 1
+                bar()
                 continue
 
     db.commit()
-    logger.info(f"Inserted {inserted_count} orders from {file.filename}")
+    logger.info(f"Inserted {inserted_count} orders and skipped {skipped_count} orders from {file.filename}")
     return {
         "inserted": inserted_count, 
         "skipped": skipped_count
     }
-
