@@ -8,28 +8,25 @@ from sqlalchemy.orm import sessionmaker
 from backend.database import Base, get_db
 from backend.main import app
 
-# Use an in-memory SQLite database
+# Use in-memory SQLite database
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Create tables once per test session
-@pytest.fixture(scope="session", autouse=True)
-def create_test_db():
-    Base.metadata.create_all(bind=engine)
+# Create tables before anything else runs
+Base.metadata.create_all(bind=engine)
 
-@pytest.fixture()
-def db():
+# Dependency override to use in-memory DB
+def override_get_db():
     db = TestingSessionLocal()
     try:
         yield db
     finally:
         db.close()
 
-@pytest.fixture()
-def client(db):
-    def override_get_db():
-        yield db
+app.dependency_overrides[get_db] = override_get_db
 
-    app.dependency_overrides[get_db] = override_get_db
-    return TestClient(app)
+@pytest.fixture(scope="module")
+def client():
+    with TestClient(app) as c:
+        yield c
