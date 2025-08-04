@@ -14,8 +14,8 @@
 - [x] Update docs for using API
 
 ### Phase 2 – Frontend (due 8/6)
-- [ ] Show orders, routes, & trucks in table
-- [ ] Upload .csv of raw order list
+- [x] Show orders, routes, & trucks in table
+- [x] Upload .csv of raw order list
 - [ ] Style website
 - [ ] Edit orders
   - [ ] Edit order details
