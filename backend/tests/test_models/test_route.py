@@ -1,11 +1,12 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.database import Base
-from app.models.truck import Truck
-from app.models.route import Route
-from app.models.order import Order
 from datetime import date
+
+from backend.database import Base
+from backend.models.truck import Truck
+from backend.models.route import Route
+from backend.models.order import Order
 
 @pytest.fixture(scope="module")
 def db():

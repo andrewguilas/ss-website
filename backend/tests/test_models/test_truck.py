@@ -1,8 +1,9 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.database import Base
-from app.models.truck import Truck
+
+from backend.database import Base
+from backend.models.truck import Truck
 
 @pytest.fixture(scope="module")
 def db():

@@ -2,10 +2,11 @@
 
 from sqlalchemy.orm import Session
 from datetime import date
-from app.models.order import Order
-from app.models.route import Route
-from app.models.truck import Truck
 import logging
+
+from backend.models.order import Order
+from backend.models.route import Route
+from backend.models.truck import Truck
 
 logger = logging.getLogger(__name__)
 

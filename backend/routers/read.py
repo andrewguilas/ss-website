@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.database import get_db
-from app.models.order import Order
-from app.models.route import Route
-from app.models.truck import Truck
+
+from backend.database import get_db
+from backend.models.order import Order
+from backend.models.route import Route
+from backend.models.truck import Truck
 
 router = APIRouter()
 

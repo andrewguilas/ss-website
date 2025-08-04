@@ -1,8 +1,9 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from app.utils.openai import ask_openai
 
-@patch("app.utils.openai.client")
+from backend.utils.openai import ask_openai
+
+@patch("backend.utils.openai.client")
 def test_ask_openai_success(mock_client):
     mock_response = MagicMock()
     mock_response.output_text = "test-pronunciation"
@@ -12,7 +13,7 @@ def test_ask_openai_success(mock_client):
     assert result == "test-pronunciation"
     mock_client.responses.create.assert_called_once_with(model="gpt-4.1-nano", input="How do you pronounce Andrew?")
 
-@patch("app.utils.openai.client")
+@patch("backend.utils.openai.client")
 def test_ask_openai_exception(mock_client):
     mock_client.responses.create.side_effect = Exception("API failed")
     result = ask_openai("This will fail")

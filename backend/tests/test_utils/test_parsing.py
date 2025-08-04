@@ -1,6 +1,7 @@
 import pytest
-from app.utils.parsing import parse_int, parse_phone, parse_location, parse_date
 from datetime import date
+
+from backend.utils.parsing import parse_int, parse_phone, parse_location, parse_date
 
 # --- parse_int ---
 def test_parse_int_valid():

@@ -1,9 +1,10 @@
 from fastapi import FastAPI
-from app.database import Base, engine
-from app.models import order, route, truck
-from app.routers import upload, read
 import logging
 from fastapi.middleware.cors import CORSMiddleware
+
+from backend.database import Base, engine
+from backend.models import order, route, truck
+from backend.routers import upload, read
 
 app = FastAPI()
 
