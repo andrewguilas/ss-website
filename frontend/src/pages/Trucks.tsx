@@ -10,6 +10,9 @@ export default function Trucks() {
   const [trucks, setTrucks] = useState<Truck[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [editModel, setEditModel] = useState("")
+  const [editComments, setEditComments] = useState("")
 
   useEffect(() => {
     fetch("http://localhost:8000/trucks")
@@ -21,6 +24,36 @@ export default function Trucks() {
       })
       .finally(() => setLoading(false))
   }, [])
+
+  const startEdit = (truck: Truck) => {
+    setEditingId(truck.id)
+    setEditModel(truck.model ?? "")
+    setEditComments(truck.comments ?? "")
+  }
+
+  const cancelEdit = () => {
+    setEditingId(null)
+    setEditModel("")
+    setEditComments("")
+  }
+
+  const saveEdit = async (id: number) => {
+    try {
+      const res = await fetch(`http://localhost:8000/trucks`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: editingId, model: editModel, comments: editComments }),
+      })
+      if (!res.ok) throw new Error("Failed to update truck")
+      const updated = await res.json()
+      setTrucks(trucks =>
+        trucks.map(t => (t.id === id ? updated : t))
+      )
+      cancelEdit()
+    } catch (err) {
+      alert(`Update failed: ${err}`)
+    }
+  }
 
   return (
     <div className="p-6">
@@ -35,14 +68,60 @@ export default function Trucks() {
               <th className="border px-4 py-2">ID</th>
               <th className="border px-4 py-2">Model</th>
               <th className="border px-4 py-2">Comments</th>
+              <th className="border px-4 py-2"></th>
             </tr>
           </thead>
           <tbody>
             {trucks.map(truck => (
               <tr key={truck.id}>
                 <td className="border px-4 py-2">{truck.id}</td>
-                <td className="border px-4 py-2">{truck.model}</td>
-                <td className="border px-4 py-2 whitespace-pre-wrap">{truck.comments}</td>
+                <td className="border px-4 py-2">
+                  {editingId === truck.id ? (
+                    <input
+                      className="border px-1"
+                      value={editModel}
+                      onChange={e => setEditModel(e.target.value)}
+                    />
+                  ) : (
+                    truck.model
+                  )}
+                </td>
+                <td className="border px-4 py-2 whitespace-pre-wrap">
+                  {editingId === truck.id ? (
+                    <input
+                      className="border px-1 w-full"
+                      value={editComments}
+                      onChange={e => setEditComments(e.target.value)}
+                    />
+                  ) : (
+                    truck.comments
+                  )}
+                </td>
+                <td className="border px-4 py-2">
+                  {editingId === truck.id ? (
+                    <>
+                      <button
+                        className="mr-2 px-2 py-1 bg-green-600 text-white rounded"
+                        onClick={() => saveEdit(truck.id)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="px-2 py-1 bg-gray-400 text-white rounded"
+                        onClick={cancelEdit}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      className="px-2 py-1 bg-blue-600 text-white rounded"
+                      onClick={() => startEdit(truck)}
+                    >
+                      Edit
+                    </button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
