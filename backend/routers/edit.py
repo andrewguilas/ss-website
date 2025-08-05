@@ -33,6 +33,12 @@ def edit_routes(update: RouteUpdate, db: Session = Depends(get_db)):
     if not route:
         raise HTTPException(status_code=404, detail="Route not found")
 
+    # Check if the new truck exists (if truck_id is being updated)
+    if update.truck_id is not None:
+        truck = db.query(Truck).filter(Truck.id == update.truck_id).first()
+        if not truck:
+            raise HTTPException(status_code=404, detail="Truck not found")
+
     # Check for duplicate truck assignment on the same day
     new_date = update.date if update.date is not None else route.date
     new_truck_id = update.truck_id if update.truck_id is not None else route.truck_id
