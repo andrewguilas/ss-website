@@ -61,7 +61,7 @@ def get_truck_or_404(db, truck_id):
         raise HTTPException(status_code=404, detail="Truck not found")
     return truck
 
-@router.put("/orders")
+@router.patch("/orders")
 def edit_orders(update: OrderUpdate, db: Session = Depends(get_db)):
     order = get_order_or_404(db, update.id)
     
@@ -84,7 +84,7 @@ def edit_orders(update: OrderUpdate, db: Session = Depends(get_db)):
     db.refresh(order)
     return order
 
-@router.put("/routes")
+@router.patch("/routes")
 def edit_routes(update: RouteUpdate, db: Session = Depends(get_db)):
     route = get_route_or_404(db, update.id)
 
@@ -119,9 +119,9 @@ def edit_routes(update: RouteUpdate, db: Session = Depends(get_db)):
     db.refresh(route)
     return route
 
-@router.put("/trucks")
+@router.patch("/trucks")
 def edit_trucks(update: TruckUpdate, db: Session = Depends(get_db)):
-    truck = get_truck_or_404(update.id)
+    truck = get_truck_or_404(db, update.id)
     
     for field, value in update.model_dump(exclude_unset=True).items():
         if field != "id":
