@@ -8,8 +8,28 @@ from backend.database import get_db
 from backend.models.order import Order
 from backend.models.route import Route
 from backend.models.truck import Truck
+from backend.utils.parsing import parse_phone
 
 router = APIRouter()
+
+class OrderUpdate(BaseModel):
+    id: int
+    campus: Optional[str] = None
+    name: Optional[str] = None
+    phone: Optional[str] = None
+    pronunciation: Optional[str] = None
+    comments: Optional[str] = None
+    pickup_date: Optional[date_class] = None
+    pickup_location: Optional[str] = None
+    pickup_proxy_name: Optional[str] = None
+    pickup_proxy_phone: Optional[str] = None
+    dropoff_date: Optional[date_class] = None
+    dropoff_location: Optional[str] = None
+    dropoff_proxy_name: Optional[str] = None
+    dropoff_proxy_phone: Optional[str] = None
+    item_count: Optional[int] = None
+    items: Optional[str] = None
+    route_id: Optional[int] = None
 
 class RouteUpdate(BaseModel):
     id: int
@@ -24,8 +44,31 @@ class TruckUpdate(BaseModel):
     comments: Optional[str] = None
 
 @router.put("/orders")
-def edit_orders(db: Session = Depends(get_db)):
-    pass
+def edit_orders(update: OrderUpdate, db: Session = Depends(get_db)):
+    order = db.query(Order).filter(Order.id == update.id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Check if the new route exists (if route_id is being updated)
+    if update.route_id is not None:
+        route = db.query(Route).filter(Route.id == update.route_id).first()
+        if not route:
+            raise HTTPException(status_code=404, detail="Route not found")
+
+    if update.phone is not None:
+        update.phone = parse_phone(update.phone)
+    if update.pickup_proxy_phone is not None:
+        update.pickup_proxy_phone = parse_phone(update.pickup_proxy_phone)
+    if update.dropoff_proxy_phone is not None:
+        update.dropoff_proxy_phone = parse_phone(update.dropoff_proxy_phone)
+
+    for field, value in update.model_dump(exclude_unset=True).items():
+        if field != "id":
+            setattr(order, field, value)
+
+    db.commit()
+    db.refresh(order)
+    return order
 
 @router.put("/routes")
 def edit_routes(update: RouteUpdate, db: Session = Depends(get_db)):
