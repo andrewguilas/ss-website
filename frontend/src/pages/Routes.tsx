@@ -13,7 +13,6 @@ export default function Routes() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [editingId, setEditingId] = useState<number | null>(null)
-  const [editDate, setEditDate] = useState("")
   const [editDriverName, setEditDriverName] = useState("")
   const [editComments, setEditComments] = useState("")
   const [editTruckId, setEditTruckId] = useState<number | null>(null)
@@ -31,7 +30,6 @@ export default function Routes() {
 
   const startEdit = (route: Route) => {
     setEditingId(route.id)
-    setEditDate(route.date ?? "")
     setEditDriverName(route.driver_name ?? "")
     setEditComments(route.comments ?? "")
     setEditTruckId(route.truck_id)
@@ -39,7 +37,6 @@ export default function Routes() {
 
   const cancelEdit = () => {
     setEditingId(null)
-    setEditDate("")
     setEditDriverName("")
     setEditComments("")
     setEditTruckId(null)
@@ -48,7 +45,6 @@ export default function Routes() {
   const saveEdit = async (id: number) => {
     try {
       const body: any = { id }
-      if (editDate) body.date = editDate
       body.driver_name = editDriverName
       body.comments = editComments
       if (editTruckId !== null && editTruckId !== undefined) body.truck_id = editTruckId
@@ -95,16 +91,7 @@ export default function Routes() {
               <tr key={route.id}>
                 <td className="border px-4 py-2">{route.id}</td>
                 <td className="border px-4 py-2">
-                  {editingId === route.id ? (
-                    <input
-                      type="date"
-                      className="border px-1"
-                      value={editDate}
-                      onChange={e => setEditDate(e.target.value)}
-                    />
-                  ) : (
-                    route.date
-                  )}
+                  {route.date}
                 </td>
                 <td className="border px-4 py-2">
                   {editingId === route.id ? (

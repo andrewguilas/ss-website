@@ -33,7 +33,6 @@ class OrderUpdate(BaseModel):
 
 class RouteUpdate(BaseModel):
     id: int
-    date: Optional[date_class] = None
     driver_name: Optional[str] = None
     comments: Optional[str] = None
     truck_id: Optional[int] = None
@@ -93,14 +92,13 @@ def edit_routes(update: RouteUpdate, db: Session = Depends(get_db)):
         get_truck_or_404(db, update.truck_id)
 
     # Check for duplicate truck assignment on the same day
-    new_date = update.date if update.date is not None else route.date
     new_truck_id = update.truck_id if update.truck_id is not None else route.truck_id
-    if new_date and new_truck_id:
+    if new_truck_id:
         conflict = (
             db.query(Route)
             .filter(
                 Route.id != route.id,
-                Route.date == new_date,
+                Route.date == route.date,
                 Route.truck_id == new_truck_id
             )
             .first()
