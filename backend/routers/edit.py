@@ -94,7 +94,7 @@ def edit_routes(update: RouteUpdate, db: Session = Depends(get_db)):
     # Check for duplicate truck assignment on the same day
     new_truck_id = update.truck_id if update.truck_id is not None else route.truck_id
     if new_truck_id:
-        conflict = (
+        conflicting_route = (
             db.query(Route)
             .filter(
                 Route.id != route.id,
@@ -103,7 +103,7 @@ def edit_routes(update: RouteUpdate, db: Session = Depends(get_db)):
             )
             .first()
         )
-        if conflict:
+        if conflicting_route:
             raise HTTPException(
                 status_code=400,
                 detail="This truck is already assigned to another route on this date."

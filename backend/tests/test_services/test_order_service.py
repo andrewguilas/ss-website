@@ -47,11 +47,11 @@ def test_create_order_without_dropoff_date(db):
 
 def test_create_order_with_existing_route(db):
     # Pre-create truck and route
-    truck = Truck(id=1, model="Ford Transit")
+    truck = Truck(model="Ford Transit")
     db.add(truck)
     db.commit()
 
-    route = Route(id=1, date=date(2025, 8, 24), truck_id=truck.id)
+    route = Route(date=date(2025, 8, 24), truck_id=truck.id)
     db.add(route)
     db.commit()
 
@@ -78,7 +78,7 @@ def test_create_order_creates_new_route_and_truck(db):
 
 def test_create_order_uses_existing_unused_truck(db):
     # Truck is created but not assigned to any route on this date
-    truck = Truck(id=2, model="Unused Truck")
+    truck = Truck(model="Unused Truck")
     db.add(truck)
     db.commit()
 
