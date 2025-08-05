@@ -6,8 +6,8 @@ class TruckRead(BaseModel):
     model: Optional[str] = None
     comments: Optional[str] = None
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
 
 class TruckCreate(BaseModel):
     model: Optional[str] = None

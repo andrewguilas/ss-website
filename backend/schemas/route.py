@@ -11,6 +11,6 @@ class RouteRead(RouteCreate):
     id: int
     truck_id: int
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
         

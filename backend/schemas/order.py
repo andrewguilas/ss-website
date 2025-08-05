@@ -23,5 +23,5 @@ class OrderCreate(BaseModel):
 class OrderRead(OrderCreate):
     route_id: Optional[int] = None
 
-    class Config:
-        orm_mode = True
+    class ConfigDict:
+        from_attributes = True
