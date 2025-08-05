@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.database import Base, engine
 from backend.models import order, route, truck
-from backend.routers import upload, read, edit
+from backend.routers import upload, read, edit, create
 
 app = FastAPI()
 
@@ -14,6 +14,7 @@ if __name__ == "__main__":
 app.include_router(upload.router)
 app.include_router(read.router)
 app.include_router(edit.router)
+app.include_router(create.router)
 
 app.add_middleware(
     CORSMiddleware,
