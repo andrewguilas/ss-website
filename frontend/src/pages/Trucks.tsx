@@ -65,9 +65,9 @@ export default function Trucks() {
         <table className="table-auto border border-gray-300">
           <thead>
             <tr className="bg-gray-200">
-              <th className="border px-4 py-2">ID</th>
-              <th className="border px-4 py-2">Model</th>
-              <th className="border px-4 py-2">Comments</th>
+              <th className="border px-4 py-2">id</th>
+              <th className="border px-4 py-2">model</th>
+              <th className="border px-4 py-2">comments</th>
               <th className="border px-4 py-2"></th>
             </tr>
           </thead>
