@@ -16,7 +16,6 @@
 ### Phase 2 – Frontend (due 8/6)
 - [x] Show orders, routes, & trucks in table
 - [x] Upload .csv of raw order list
-- [ ] Style website
 - [x] Edit orders
   - [x] Edit order details
   - [x] Assign a route to an order
@@ -31,8 +30,9 @@
   - [x] Edit trucks
   - [ ] Delete trucks
 - [] Other
-  - [ ] Update API docs
-  - [ ] Create tests for route_service.py and truck_service.py
+  - [x] Update API docs
+  - [x] Create tests for route_service.py and truck_service.py
+  - [ ] Style website
 
 ### Phase 3 – Order Photos
 - [ ] Separate app to connect to storagescholars.com
