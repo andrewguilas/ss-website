@@ -43,17 +43,31 @@ class TruckUpdate(BaseModel):
     model: Optional[str] = None
     comments: Optional[str] = None
 
-@router.put("/orders")
-def edit_orders(update: OrderUpdate, db: Session = Depends(get_db)):
-    order = db.query(Order).filter(Order.id == update.id).first()
+def get_order_or_404(db, order_id):
+    order = db.query(Order).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
+    return order
+
+def get_route_or_404(db, route_id):
+    route = db.query(Route).filter(Route.id == route_id).first()
+    if not route:
+        raise HTTPException(status_code=404, detail="Route not found")
+    return route
+
+def get_truck_or_404(db, truck_id):
+    truck = db.query(Truck).filter(Truck.id == truck_id).first()
+    if not truck:
+        raise HTTPException(status_code=404, detail="Truck not found")
+    return truck
+
+@router.put("/orders")
+def edit_orders(update: OrderUpdate, db: Session = Depends(get_db)):
+    order = get_order_or_404(db, update.id)
     
     # Check if the new route exists (if route_id is being updated)
     if update.route_id is not None:
-        route = db.query(Route).filter(Route.id == update.route_id).first()
-        if not route:
-            raise HTTPException(status_code=404, detail="Route not found")
+        get_route_or_404(db, update.route_id)
 
     if update.phone is not None:
         update.phone = parse_phone(update.phone)
@@ -72,15 +86,11 @@ def edit_orders(update: OrderUpdate, db: Session = Depends(get_db)):
 
 @router.put("/routes")
 def edit_routes(update: RouteUpdate, db: Session = Depends(get_db)):
-    route = db.query(Route).filter(Route.id == update.id).first()
-    if not route:
-        raise HTTPException(status_code=404, detail="Route not found")
+    route = get_route_or_404(db, update.id)
 
     # Check if the new truck exists (if truck_id is being updated)
     if update.truck_id is not None:
-        truck = db.query(Truck).filter(Truck.id == update.truck_id).first()
-        if not truck:
-            raise HTTPException(status_code=404, detail="Truck not found")
+        get_truck_or_404(db, update.truck_id)
 
     # Check for duplicate truck assignment on the same day
     new_date = update.date if update.date is not None else route.date
@@ -111,9 +121,7 @@ def edit_routes(update: RouteUpdate, db: Session = Depends(get_db)):
 
 @router.put("/trucks")
 def edit_trucks(update: TruckUpdate, db: Session = Depends(get_db)):
-    truck = db.query(Truck).filter(Truck.id == update.id).first()
-    if not truck:
-        raise HTTPException(status_code=404, detail="Truck not found")
+    truck = get_truck_or_404(update.id)
     
     for field, value in update.model_dump(exclude_unset=True).items():
         if field != "id":
