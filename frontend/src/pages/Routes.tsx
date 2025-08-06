@@ -148,12 +148,44 @@ export default function Routes() {
                       </button>
                     </>
                   ) : (
-                    <button
-                      className="px-2 py-1 bg-blue-600 text-white rounded"
-                      onClick={() => startEdit(route)}
-                    >
-                      Edit
-                    </button>
+                    <>
+                      <button
+                        className="px-2 py-1 bg-blue-600 text-white rounded mr-2"
+                        onClick={() => startEdit(route)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="px-2 py-1 bg-red-600 text-white rounded"
+                        onClick={async () => {
+                          if (
+                            window.confirm(
+                              `Are you sure you want to delete route ${route.id}?`
+                            )
+                          ) {
+                            try {
+                              const res = await fetch(
+                                `http://localhost:8000/routes/${route.id}`,
+                                { method: "DELETE" }
+                              )
+                              if (!res.ok) {
+                                const err = await res.json()
+                                throw new Error(err.detail || "Delete failed")
+                              }
+                              setRoutes(routes =>
+                                routes.filter(r => r.id !== route.id)
+                              )
+                            } catch (err: any) {
+                              alert(
+                                `Delete failed: ${err.message || err.toString()}`
+                              )
+                            }
+                          }
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </>
                   )}
                 </td>
               </tr>
