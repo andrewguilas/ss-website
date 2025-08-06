@@ -13,30 +13,46 @@
 - [x] Ensure logging covers all critical flows & errors
 - [x] Update docs for using API
 
-### Phase 2 – Frontend (due 8/6)
+### Phase 2 – Frontend
 - [x] Show orders, routes, & trucks in table
 - [x] Upload .csv of raw order list
 - [x] Edit orders
-  - [ ] Add route
+  - [x] Add route
   - [x] Edit order details
-  - [ ] Delete order
+  - [x] Delete order
   - [x] Assign a route to an order
 - [ ] Edit routes
-  - [ ] Add routes
+  - [x] Add routes
   - [x] Edit routes
   - [x] Delete routes
   - [x] Assign a truck to a route
-  - [ ] Reorder orders within a route
-- [ ] Edit trucks
-  - [ ] Add trucks
+  - [ ] Reorder orders within a route (delaying)
+- [x] Edit trucks
+  - [x] Add trucks
   - [x] Edit trucks
   - [x] Delete trucks
-- [] Other
+- [x] Other
   - [x] Update API docs
   - [x] Create tests for route_service.py and truck_service.py
-  - [ ] Style website
 
-### Phase 3 – Order Photos
+### Phase 3 - Frontend with MUI (due 8/7)
+- [ ] Install MUI
+- [ ] Replace existing tables with MUI Data Grid
+- [ ] Sorting
+- [ ] Filtering
+- [ ] Row editing
+- [ ] Row creation
+- [ ] Row selection with checkboxes
+- [ ] Column customization (show/hide, reordering, resizing)
+- [ ] Export to PDF to print
+- [ ] Action button to open item in a new page
+- [ ] Expandable detail panel (proxies)
+- [ ] Group rows
+- [ ] Alerts
+- [ ] Icons for action buttons
+- [ ] Styling
+
+### Phase 4 – Order Photos
 - [ ] Separate app to connect to storagescholars.com
   - [ ] Pull orders from website
   - [ ] Download order photos
@@ -45,10 +61,10 @@
   - [ ] Match each order
   - [ ] Add photos for each order
 
-### Phase 4 – Map Integration
+### Phase 5 – Map Integration
 - [ ] Show map of all the orders in a route
 
-### Phase 5 – Mobile Optimization
+### Phase 6 – Mobile Optimization
 - [ ] Host website on Heroku
 - [ ] Add support for mobile website
 
