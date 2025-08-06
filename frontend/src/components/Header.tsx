@@ -1,15 +1,51 @@
 import { Link, Outlet } from "react-router-dom"
+import AppBar from "@mui/material/AppBar"
+import Toolbar from "@mui/material/Toolbar"
+import Button from "@mui/material/Button"
+import Box from "@mui/material/Box"
 
 export default function Header() {
   return (
     <div>
-      <nav className="bg-gray-800 text-white px-6 py-3 flex gap-4">
-        <Link to="/orders" className="hover:underline">Orders</Link>
-        <Link to="/routes" className="hover:underline">Routes</Link>
-        <Link to="/trucks" className="hover:underline">Trucks</Link>
-        <Link to="/upload" className="hover:underline">Upload</Link>
-      </nav>
-      <main className="p-6">
+      <AppBar position="static" color="primary" elevation={1}>
+        <Toolbar>
+          <Box sx={{ flexGrow: 1, display: "flex", gap: 2 }}>
+            <Button
+              component={Link}
+              to="/orders"
+              color="inherit"
+              sx={{ textTransform: "none" }}
+            >
+              Orders
+            </Button>
+            <Button
+              component={Link}
+              to="/routes"
+              color="inherit"
+              sx={{ textTransform: "none" }}
+            >
+              Routes
+            </Button>
+            <Button
+              component={Link}
+              to="/trucks"
+              color="inherit"
+              sx={{ textTransform: "none" }}
+            >
+              Trucks
+            </Button>
+            <Button
+              component={Link}
+              to="/upload"
+              color="inherit"
+              sx={{ textTransform: "none" }}
+            >
+              Upload
+            </Button>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <main style={{ padding: 24 }}>
         <Outlet />
       </main>
     </div>
