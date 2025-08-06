@@ -49,3 +49,13 @@ def delete_route(route_id: int, db: Session = Depends(get_db)):
     db.delete(route)
     db.commit()
     return {"detail": f"Route {route_id} deleted"}
+
+@router.delete("/orders/{order_id}")
+def delete_order(order_id: int, db: Session = Depends(get_db)):
+    order = db.query(Order).filter(Order.id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    db.delete(order)
+    db.commit()
+    return {"detail": f"Order {order_id} deleted"}
