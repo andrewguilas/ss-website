@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import FormField from "../../components/FormField"
 
 export default function CreateRoute() {
   const [date, setDate] = useState("")
@@ -41,45 +42,29 @@ export default function CreateRoute() {
     <div className="p-6 max-w-lg mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Create Route</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm mb-1">date</label>
-          <input
-            type="date"
-            className="border px-2 py-1 rounded w-full"
-            value={date}
-            onChange={e => setDate(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">driver_name</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={driverName}
-            onChange={e => setDriverName(e.target.value)}
-            placeholder="driver_name"
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">comments</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={comments}
-            onChange={e => setComments(e.target.value)}
-            placeholder="comments"
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">truck_id</label>
-          <input
-            type="number"
-            className="border px-2 py-1 rounded w-full"
-            value={truckId}
-            onChange={e => setTruckId(e.target.value ? Number(e.target.value) : "")}
-            placeholder="truck_id (optional)"
-            min={1}
-          />
-        </div>
+        <FormField
+          label="Date"
+          value={date}
+          onChange={e => setDate(e.target.value)}
+          type="date"
+          required
+        />
+        <FormField
+          label="Driver Name"
+          value={driverName}
+          onChange={e => setDriverName(e.target.value)}
+        />
+        <FormField
+          label="Comments"
+          value={comments}
+          onChange={e => setComments(e.target.value)}
+        />
+        <FormField
+          label="Truck ID"
+          value={truckId}
+          onChange={e => setTruckId(e.target.value ? Number(e.target.value) : "")}
+          type="number"
+        />
         {error && <p className="text-red-600">{error}</p>}
         <div className="flex gap-2">
           <button

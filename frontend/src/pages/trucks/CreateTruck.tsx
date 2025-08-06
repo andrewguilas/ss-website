@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import FormField from "../../components/FormField"
 
 export default function CreateTruck() {
   const [model, setModel] = useState("")
@@ -34,24 +35,17 @@ export default function CreateTruck() {
     <div className="p-6 max-w-lg mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Create Truck</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm mb-1">model</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={model}
-            onChange={e => setModel(e.target.value)}
-            placeholder="Model"
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">comments</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={comments}
-            onChange={e => setComments(e.target.value)}
-            placeholder="Comments"
-          />
-        </div>
+        <FormField
+          label="Model"
+          value={model}
+          onChange={e => setModel(e.target.value)}
+          required
+        />
+        <FormField
+          label="Comments"
+          value={comments}
+          onChange={e => setComments(e.target.value)}
+        />
         {error && <p className="text-red-600">{error}</p>}
         <div className="flex gap-2">
           <button
