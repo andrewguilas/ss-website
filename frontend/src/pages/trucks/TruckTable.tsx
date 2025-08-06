@@ -1,4 +1,4 @@
-import type { Truck } from "./Trucks"
+import type { Truck } from "../../types"
 import TruckRow from "./TruckRow"
 
 interface Props {

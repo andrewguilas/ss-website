@@ -1,4 +1,4 @@
-import type { Route } from "./Routes"
+import type { Route } from "../../types"
 import RouteRow from "./RouteRow"
 
 interface Props {

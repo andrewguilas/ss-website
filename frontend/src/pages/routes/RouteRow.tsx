@@ -1,5 +1,5 @@
 import TableActions from "../../components/TableActions"
-import type { Route } from "./Routes"
+import type { Route } from "../../types"
 
 interface Props {
   route: Route

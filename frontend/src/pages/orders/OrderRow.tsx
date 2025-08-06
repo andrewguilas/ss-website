@@ -1,5 +1,5 @@
 import TableActions from "../../components/TableActions"
-import type { Order } from "./Orders"
+import type { Order } from "../../types"
 
 interface Props {
   order: Order

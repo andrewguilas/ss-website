@@ -1,4 +1,4 @@
-import type { Order } from "./Orders"
+import type { Order } from "../../types"
 import OrderRow from "./OrderRow"
 
 interface Props {
