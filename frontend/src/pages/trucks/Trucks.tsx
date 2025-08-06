@@ -3,12 +3,7 @@ import { useNavigate } from "react-router-dom"
 import TruckTable from "./TruckTable"
 import LoadingIndicator from "../../components/LoadingIndicator"
 import ErrorMessage from "../../components/ErrorMessage"
-
-export interface Truck {
-  id: number
-  model: string | null
-  comments: string | null
-}
+import type { Truck } from "../../types"
 
 export default function Trucks() {
   const [trucks, setTrucks] = useState<Truck[]>([])

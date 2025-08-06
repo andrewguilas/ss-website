@@ -3,26 +3,7 @@ import { useNavigate } from "react-router-dom"
 import OrderTable from "./OrderTable"
 import LoadingIndicator from "../../components/LoadingIndicator"
 import ErrorMessage from "../../components/ErrorMessage"
-
-export interface Order {
-  id: number
-  campus: string
-  name: string
-  phone: string | null
-  pronunciation: string | null
-  comments: string | null
-  pickup_date: string | null
-  pickup_location: string | null
-  pickup_proxy_name: string | null
-  pickup_proxy_phone: string | null
-  dropoff_date: string | null
-  dropoff_location: string | null
-  dropoff_proxy_name: string | null
-  dropoff_proxy_phone: string | null
-  item_count: number | null
-  items: string | null
-  route_id: number | null
-}
+import type { Order } from "../../types"
 
 export default function Orders() {
   const [orders, setOrders] = useState<Order[]>([])
