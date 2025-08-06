@@ -34,6 +34,7 @@
 - [] Other
   - [x] Update API docs
   - [x] Create tests for route_service.py and truck_service.py
+  - [x] Refactored pages into more components
   - [ ] Style website
 
 ### Phase 3 – Order Photos
