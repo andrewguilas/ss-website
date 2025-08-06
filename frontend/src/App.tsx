@@ -8,7 +8,6 @@ import RoutesPage from "./pages/Routes"
 import CreateRoute from "./pages/CreateRoute"
 
 import Trucks from "./pages/Trucks"
-import CreateTruck from "./pages/CreateTruck"
 
 import CsvUploadPage from "./pages/CsvUploadPage"
 
@@ -24,7 +23,6 @@ function App() {
         <Route path="/routes/create" element={<CreateRoute />} />
 
         <Route path="/trucks" element={<Trucks />} />
-        <Route path="/trucks/create" element={<CreateTruck />} />
 
         <Route path="/upload" element={<CsvUploadPage />} />
       </Route>
