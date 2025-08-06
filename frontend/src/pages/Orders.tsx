@@ -1,31 +1,33 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Box, CircularProgress, Alert, Button, Snackbar } from "@mui/material"
+import OrderDataGrid from "../components/OrderDataGrid"
+import OrderCreateDialog from "../components/OrderCreateDialog"
 import type { Order } from "../schemas"
 
 export default function Orders() {
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const navigate = useNavigate()
-
-  const [editingId, setEditingId] = useState<number | null>(null)
-  const [editCampus, setEditCampus] = useState("")
-  const [editName, setEditName] = useState("")
-  const [editPhone, setEditPhone] = useState("")
-  const [editPronunciation, setEditPronunciation] = useState("")
-  const [editComments, setEditComments] = useState("")
-  const [editPickupDate, setEditPickupDate] = useState("")
-  const [editPickupLocation, setEditPickupLocation] = useState("")
-  const [editPickupProxyName, setEditPickupProxyName] = useState("")
-  const [editPickupProxyPhone, setEditPickupProxyPhone] = useState("")
-  const [editDropoffDate, setEditDropoffDate] = useState("")
-  const [editDropoffLocation, setEditDropoffLocation] = useState("")
-  const [editDropoffProxyName, setEditDropoffProxyName] = useState("")
-  const [editDropoffProxyPhone, setEditDropoffProxyPhone] = useState("")
-  const [editItemCount, setEditItemCount] = useState<number | null>(null)
-  const [editItems, setEditItems] = useState("")
-  const [editRouteId, setEditRouteId] = useState<number | null>(null)
+  const [error, setError] = useState("")
+  const [createOpen, setCreateOpen] = useState(false)
+  
+  const [newCampus, setNewCampus] = useState("")
+  const [newName, setNewName] = useState("")
+  const [newPhone, setNewPhone] = useState("")
+  const [newPronunciation, setNewPronunciation] = useState("")
+  const [newComments, setNewComments] = useState("")
+  const [newPickupDate, setNewPickupDate] = useState("")
+  const [newPickupLocation, setNewPickupLocation] = useState("")
+  const [newPickupProxyName, setNewPickupProxyName] = useState("")
+  const [newPickupProxyPhone, setNewPickupProxyPhone] = useState("")
+  const [newDropoffDate, setNewDropoffDate] = useState("")
+  const [newDropoffLocation, setNewDropoffLocation] = useState("")
+  const [newDropoffProxyName, setNewDropoffProxyName] = useState("")
+  const [newDropoffProxyPhone, setNewDropoffProxyPhone] = useState("")
+  const [newItemCount, setNewItemCount] = useState<number | null>(null)
+  const [newItems, setNewItems] = useState("")
+  const [newRouteId, setNewRouteId] = useState<number | null>(null)
+  
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
 
   useEffect(() => {
     fetch("http://localhost:8000/orders")
@@ -33,222 +35,187 @@ export default function Orders() {
       .then(data => setOrders(data))
       .catch(err => {
         setError("Failed to fetch orders.")
-        console.error(err)
+        console.log(`Failed to fetch order: ${err}`)
       })
       .finally(() => setLoading(false))
   }, [])
 
-  const startEdit = (order: Order) => {
-    setEditingId(order.id)
-    setEditCampus(order.campus ?? "")
-    setEditName(order.name ?? "")
-    setEditPhone(order.phone ?? "")
-    setEditPronunciation(order.pronunciation ?? "")
-    setEditComments(order.comments ?? "")
-    setEditPickupDate(order.pickup_date ?? "")
-    setEditPickupLocation(order.pickup_location ?? "")
-    setEditPickupProxyName(order.pickup_proxy_name ?? "")
-    setEditPickupProxyPhone(order.pickup_proxy_phone ?? "")
-    setEditDropoffDate(order.dropoff_date ?? "")
-    setEditDropoffLocation(order.dropoff_location ?? "")
-    setEditDropoffProxyName(order.dropoff_proxy_name ?? "")
-    setEditDropoffProxyPhone(order.dropoff_proxy_phone ?? "")
-    setEditItemCount(order.item_count)
-    setEditItems(order.items ?? "")
-    setEditRouteId(order.route_id)
-  }
-
-  const cancelEdit = () => {
-    setEditingId(null)
-    setEditCampus("")
-    setEditName("")
-    setEditPhone("")
-    setEditPronunciation("")
-    setEditComments("")
-    setEditPickupDate("")
-    setEditPickupLocation("")
-    setEditPickupProxyName("")
-    setEditPickupProxyPhone("")
-    setEditDropoffDate("")
-    setEditDropoffLocation("")
-    setEditDropoffProxyName("")
-    setEditDropoffProxyPhone("")
-    setEditItemCount(null)
-    setEditItems("")
-    setEditRouteId(null)
-  }
-
-  const saveEdit = async (id: number) => {
+  const handleEditRow = async (params: any) => {
+    const { id, campus, name, phone, pronunciation, comments, pickup_date, pickup_location, pickup_proxy_name, pickup_proxy_phone, dropoff_date, dropoff_location, dropoff_proxy_name, dropoff_proxy_phone, item_count, items, route_id } = params
     try {
-      const body: any = { id }
-
-      body.id = editingId
-      body.campus = editCampus
-      body.name = editName
-      body.phone = editPhone
-      body.pronunciation = editPronunciation
-      body.comments = editComments
-      body.pickup_date = editPickupDate
-      body.pickup_location = editPickupLocation
-      body.pickup_proxy_name = editPickupProxyName
-      body.pickup_proxy_phone = editPickupProxyPhone
-      body.dropoff_date = editDropoffDate
-      body.dropoff_location = editDropoffLocation
-      body.dropoff_proxy_name = editDropoffProxyName
-      body.dropoff_proxy_phone = editDropoffProxyPhone
-      body.item_count = editItemCount
-      body.items = editItems
-      body.route_id = editRouteId
-
-      if (editItemCount !== null && editItemCount !== undefined) body.item_count = editItemCount
-      if (editRouteId !== null && editRouteId !== undefined) body.route_id = editRouteId
-
-      const res = await fetch("http://localhost:8000/orders", {
+      const res = await fetch(`http://localhost:8000/orders`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ id, campus, name, phone, pronunciation, comments, pickup_date, pickup_location, pickup_proxy_name, pickup_proxy_phone, dropoff_date, dropoff_location, dropoff_proxy_name, dropoff_proxy_phone, item_count, items, route_id }),
+      })
+      if (!res.ok) throw new Error("Failed to update order")
+      const updated = await res.json()
+      setOrders(orders => orders.map(t => (t.id === id ? updated : t)))
+      setSnackbar({ open: true, message: "Order updated!", severity: "success" })
+    } catch (err) {
+      setSnackbar({ open: true, message: "Update failed", severity: "error" })
+      console.log(`Failed to edit row: ${err}`)
+    }
+  }
+
+  const handleDelete = async (id: number) => {
+    if (!window.confirm(`Are you sure you want to delete order ${id}?`)) return
+    try {
+      const res = await fetch(`http://localhost:8000/orders/${id}`, { method: "DELETE" })
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.detail || "Delete failed")
+      }
+      setOrders(orders => orders.filter(t => t.id !== id))
+      setSnackbar({ open: true, message: "Order deleted!", severity: "success" })
+    } catch (err: any) {
+      setSnackbar({ open: true, message: err.message || "Delete failed", severity: "error" })
+      console.log(`Failed to delete row: ${err}`)
+    }
+  }
+
+  const handleCreate = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          campus: newCampus,
+          name: newName,
+          phone: newPhone,
+          pronunciation: newPronunciation,
+          comments: newComments,
+          pickup_date: newPickupDate,
+          pickup_location: newPickupLocation,
+          pickup_proxy_name: newPickupProxyName,
+          pickup_proxy_phone: newPickupProxyPhone,
+          dropoff_date: newDropoffDate,
+          dropoff_location: newDropoffLocation,
+          dropoff_proxy_name: newDropoffProxyName,
+          dropoff_proxy_phone: newDropoffProxyPhone,
+          item_count: newItemCount,
+          items: newItems,
+          route_id: newRouteId
+        })
       })
       if (!res.ok) {
-        const errJson = await res.json().catch(() => ({}))
-        throw new Error(errJson.detail || "Failed to update order")
+        const err = await res.json()
+        throw new Error(err.detail || "Failed to create order")
       }
-      
-      const updated = await res.json()
-      setOrders(orders =>
-        orders.map(o => (o.id === id ? updated : o))
-      )
-      cancelEdit()
+      const created = await res.json()
+      setOrders(orders => [...orders, created])
+      setSnackbar({ open: true, message: "Order created!", severity: "success" })
+      setCreateOpen(false)
+
+      setNewCampus("")
+      setNewName("")
+      setNewPhone("")
+      setNewPronunciation("")
+      setNewComments("")
+      setNewPickupDate("")
+      setNewPickupLocation("")
+      setNewPickupProxyName("")
+      setNewPickupProxyPhone("")
+      setNewDropoffDate("")
+      setNewDropoffLocation("")
+      setNewDropoffProxyName("")
+      setNewDropoffProxyPhone("")
+      setNewItemCount(null)
+      setNewItems("")
+      setNewRouteId(null)
     } catch (err: any) {
-      alert(`Update failed: ${err.message || err}`)
+      setSnackbar({ open: true, message: err.message || "Create failed", severity: "error" })
+      console.log(`Failed to create row: ${err}`)
     }
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Orders</h1>
-      <button
-        className="mb-4 px-4 py-2 bg-green-600 text-white rounded"
-        onClick={() => navigate("/orders/create")}
-      >
-        Create Order
-      </button>
-
-      {loading && <p>Loading orders...</p>}
-      {error && <p className="text-red-600">{error}</p>}
-      {!loading && orders.length === 0 && <p>No orders found.</p>}
-
-      {orders.length > 0 && (
-        <table className="table-auto border border-gray-300">
-
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border px-4 py-2">id</th>
-              <th className="border px-4 py-2">campus</th>
-              <th className="border px-4 py-2">name</th>
-              <th className="border px-4 py-2">phone</th>
-              <th className="border px-4 py-2">pronunciation</th>
-              <th className="border px-4 py-2">comments</th>
-              <th className="border px-4 py-2">pickup_date</th>
-              <th className="border px-4 py-2">pickup_location</th>
-              <th className="border px-4 py-2">pickup_proxy_name</th>
-              <th className="border px-4 py-2">pickup_proxy_phone</th>
-              <th className="border px-4 py-2">dropoff_date</th>
-              <th className="border px-4 py-2">dropoff_location</th>
-              <th className="border px-4 py-2">dropoff_proxy_name</th>
-              <th className="border px-4 py-2">dropoff_proxy_phone</th>
-              <th className="border px-4 py-2">item_count</th>
-              <th className="border px-4 py-2">items</th>
-              <th className="border px-4 py-2">route_id</th>
-
-              <th className="border px-4 py-2">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {orders.map(order => (
-              <tr key={order.id}>
-                <td className="border px-4 py-2">{order.id}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editCampus} onChange={e => setEditCampus(e.target.value)}/>) : (order.campus)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editName} onChange={e => setEditName(e.target.value)}/>) : (order.name)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editPhone} onChange={e => setEditPhone(e.target.value)}/>) : (order.phone)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editPronunciation} onChange={e => setEditPronunciation(e.target.value)}/>) : (order.pronunciation)}</td>
-                <td className="border px-4 py-2 whitespace-pre-wrap">{editingId === order.id ? (<input className="border px-1" value={editComments} onChange={e => setEditComments(e.target.value)}/>) : (order.comments)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editPickupDate} onChange={e => setEditPickupDate(e.target.value)}/>) : (order.pickup_date)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editPickupLocation} onChange={e => setEditPickupLocation(e.target.value)}/>) : (order.pickup_location)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editPickupProxyName} onChange={e => setEditPickupProxyName(e.target.value)}/>) : (order.pickup_proxy_name)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editPickupProxyPhone} onChange={e => setEditPickupProxyPhone(e.target.value)}/>) : (order.pickup_proxy_phone)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editDropoffDate} onChange={e => setEditDropoffDate(e.target.value)}/>) : (order.dropoff_date)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editDropoffLocation} onChange={e => setEditDropoffLocation(e.target.value)}/>) : (order.dropoff_location)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editDropoffProxyName} onChange={e => setEditDropoffProxyName(e.target.value)}/>) : (order.dropoff_proxy_name)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input className="border px-1" value={editDropoffProxyPhone} onChange={e => setEditDropoffProxyPhone(e.target.value)}/>) : (order.dropoff_proxy_phone)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input type="number" className="border px-1 w-20" value={editItemCount ?? ""} onChange={e => setEditItemCount(e.target.value ? Number(e.target.value) : null)}/>) : (order.item_count)}</td>
-                <td className="border px-4 py-2 whitespace-pre-wrap">{editingId === order.id ? (<input className="border px-1" value={editItems} onChange={e => setEditItems(e.target.value)}/>) : (order.items)}</td>
-                <td className="border px-4 py-2">{editingId === order.id ? (<input type="number" className="border px-1 w-20" value={editRouteId ?? ""} onChange={e => setEditRouteId(e.target.value ? Number(e.target.value) : null)}/>) : (order.route_id)}</td>
-
-                <td className="border px-4 py-2">
-                  {editingId === order.id ? (
-                    <>
-                      <button
-                        className="mr-2 px-2 py-1 bg-green-600 text-white rounded"
-                        onClick={() => saveEdit(order.id)}
-                      >
-                        Save
-                      </button>
-                      <button
-                        className="px-2 py-1 bg-gray-400 text-white rounded"
-                        onClick={cancelEdit}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        className="px-2 py-1 bg-blue-600 text-white rounded mr-2"
-                        onClick={() => startEdit(order)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="px-2 py-1 bg-red-600 text-white rounded"
-                        onClick={async () => {
-                          if (
-                            window.confirm(
-                              `Are you sure you want to delete order ${order.id}?`
-                            )
-                          ) {
-                            try {
-                              const res = await fetch(
-                                `http://localhost:8000/orders/${order.id}`,
-                                { method: "DELETE" }
-                              )
-                              if (!res.ok) {
-                                const err = await res.json()
-                                throw new Error(err.detail || "Delete failed")
-                              }
-                              setOrders(orders =>
-                                orders.filter(o => o.id !== order.id)
-                              )
-                            } catch (err: any) {
-                              alert(
-                                `Delete failed: ${err.message || err.toString()}`
-                              )
-                            }
-                          }
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </td>
-                
-              </tr>
-            ))}
-          </tbody>
-          
-        </table>
+    <Box sx={{ height: 600, width: "100%" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+        <h1 className="text-2xl font-semibold">Orders</h1>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => setCreateOpen(true)}
+        >
+          Create Order
+        </Button>
+      </Box>
+      {error && <Alert severity="error">{error}</Alert>}
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <OrderDataGrid
+          orders={orders}
+          onEditRow={handleEditRow}
+          onDelete={handleDelete}
+          setSnackbar={setSnackbar}
+        />
       )}
-    </div>
+
+      <OrderCreateDialog
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onCreate={handleCreate}
+        
+        newCampus={newCampus}
+        setNewCampus={setNewCampus}
+
+        newName={newName}
+        setNewName={setNewName}
+
+        newPhone={newPhone}
+        setNewPhone={setNewPhone}
+
+        newPronunciation={newPronunciation}
+        setNewPronunciation={setNewPronunciation}
+
+        newComments={newComments}
+        setNewComments={setNewComments}
+
+        newPickupDate={newPickupDate}
+        setNewPickupDate={setNewPickupDate}
+
+        newPickupLocation={newPickupLocation}
+        setNewPickupLocation={setNewPickupLocation}
+
+        newPickupProxyName={newPickupProxyName}
+        setNewPickupProxyName={setNewPickupProxyName}
+
+        newPickupProxyPhone={newPickupProxyPhone}
+        setNewPickupProxyPhone={setNewPickupProxyPhone}
+
+        newDropoffDate={newDropoffDate}
+        setNewDropoffDate={setNewDropoffDate}
+
+        newDropoffLocation={newDropoffLocation}
+        setNewDropoffLocation={setNewDropoffLocation}
+
+        newDropoffProxyName={newDropoffProxyName}
+        setNewDropoffProxyName={setNewDropoffProxyName}
+
+        newDropoffProxyPhone={newDropoffProxyPhone}
+        setNewDropoffProxyPhone={setNewDropoffProxyPhone}
+
+        newItemCount={newItemCount}
+        setNewItemCount={setNewItemCount}
+
+        newItems={newItems}
+        setNewItems={setNewItems}
+
+        newRouteId={newRouteId}
+        setNewRouteId={setNewRouteId}
+      />
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar(s => ({ ...s, open: false }))}
+        message={snackbar.message}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
+    </Box>
   )
 }

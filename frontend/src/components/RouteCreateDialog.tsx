@@ -40,16 +40,16 @@ export default function RouteCreateDialog({
       <DialogTitle>Create Route</DialogTitle>
       <DialogContent>
 
-      <TextField
-        autoFocus
-        margin="dense"
-        label="Date"
-        type="date"
-        fullWidth
-        value={newDate}
-        onChange={e => setNewDate(e.target.value)}
-        slotProps={{ inputLabel: { shrink: true } }}
-      />
+        <TextField
+          autoFocus
+          margin="dense"
+          label="Date"
+          type="date"
+          fullWidth
+          value={newDate}
+          onChange={e => setNewDate(e.target.value)}
+          slotProps={{ inputLabel: { shrink: true } }}
+        />
       
         <TextField
           margin="dense"
