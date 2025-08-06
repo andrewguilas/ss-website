@@ -1,6 +1,6 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from "@mui/material"
 
-interface TruckCreateDialogProps {
+interface RouteCreateDialogProps {
   open: boolean
   onClose: () => void
   onCreate: () => void
@@ -10,7 +10,7 @@ interface TruckCreateDialogProps {
   setNewComments: (v: string) => void
 }
 
-export default function TruckCreateDialog({
+export default function RouteCreateDialog({
   open,
   onClose,
   onCreate,
@@ -18,10 +18,10 @@ export default function TruckCreateDialog({
   setNewModel,
   newComments,
   setNewComments,
-}: TruckCreateDialogProps) {
+}: RouteCreateDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Create Truck</DialogTitle>
+      <DialogTitle>Create Route</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus

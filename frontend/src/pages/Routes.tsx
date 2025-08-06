@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Box, CircularProgress, Alert, Button, Snackbar } from "@mui/material"
+import RouteDataGrid from "../components/RouteDataGrid"
+import RouteCreateDialog from "../components/RouteCreateDialog"
 import type { Route } from "../schemas"
 
 export default function Routes() {
   const [routes, setRoutes] = useState<Route[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-
-  const [editingId, setEditingId] = useState<number | null>(null)
-  const [editDriverName, setEditDriverName] = useState("")
-  const [editComments, setEditComments] = useState("")
-  const [editTruckId, setEditTruckId] = useState<number | null>(null)
+  const [createOpen, setCreateOpen] = useState(false)
   
-  const navigate = useNavigate()
+  const [newDate, setNewDate] = useState("")
+  const [newDriverName, setNewDriverName] = useState("")
+  const [newComments, setNewComments] = useState("")
+  const [newTruckId, setNewTruckId] = useState<number | null>(null)
+  
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
 
   useEffect(() => {
     fetch("http://localhost:8000/routes")
@@ -20,181 +23,123 @@ export default function Routes() {
       .then(data => setRoutes(data))
       .catch(err => {
         setError("Failed to fetch routes.")
-        console.error(err)
+        console.log(`Failed to fetch route: ${err}`)
       })
       .finally(() => setLoading(false))
   }, [])
 
-  const startEdit = (route: Route) => {
-    setEditingId(route.id)
-    setEditDriverName(route.driver_name ?? "")
-    setEditComments(route.comments ?? "")
-    setEditTruckId(route.truck_id)
-  }
-
-  const cancelEdit = () => {
-    setEditingId(null)
-    setEditDriverName("")
-    setEditComments("")
-    setEditTruckId(null)
-  }
-
-  const saveEdit = async (id: number) => {
+  const handleEditRow = async (params: any) => {
+    const { id, date, driver_name, comments, truck_id } = params
     try {
-      const body: any = { id }
-
-      body.driver_name = editDriverName
-      body.comments = editComments
-      
-      if (editTruckId !== null && editTruckId !== undefined) body.truck_id = editTruckId
-
-      const res = await fetch("http://localhost:8000/routes", {
+      const res = await fetch(`http://localhost:8000/routes`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ id, date, driver_name, comments, truck_id }),
+      })
+      if (!res.ok) throw new Error("Failed to update route")
+      const updated = await res.json()
+      setRoutes(routes => routes.map(t => (t.id === id ? updated : t)))
+      setSnackbar({ open: true, message: "Route updated!", severity: "success" })
+    } catch (err) {
+      setSnackbar({ open: true, message: "Update failed", severity: "error" })
+      console.log(`Failed to edit row: ${err}`)
+    }
+  }
+
+  const handleDelete = async (id: number) => {
+    if (!window.confirm(`Are you sure you want to delete route ${id}?`)) return
+    try {
+      const res = await fetch(`http://localhost:8000/routes/${id}`, { method: "DELETE" })
+      if (!res.ok) {
+        const err = await res.json()
+        throw new Error(err.detail || "Delete failed")
+      }
+      setRoutes(routes => routes.filter(t => t.id !== id))
+      setSnackbar({ open: true, message: "Route deleted!", severity: "success" })
+    } catch (err: any) {
+      setSnackbar({ open: true, message: err.message || "Delete failed", severity: "error" })
+      console.log(`Failed to delete row: ${err}`)
+    }
+  }
+
+  const handleCreate = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/routes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: newDate, driver_name: newDriverName, comments: newComments, truck_id: newTruckId }),
       })
       if (!res.ok) {
-        const errJson = await res.json().catch(() => ({}))
-        throw new Error(errJson.detail || "Failed to update route")
+        const err = await res.json()
+        throw new Error(err.detail || "Failed to create route")
       }
-      
-      const updated = await res.json()
-      setRoutes(routes =>
-        routes.map(r => (r.id === id ? updated : r))
-      )
-      cancelEdit()
+      const created = await res.json()
+      setRoutes(routes => [...routes, created])
+      setSnackbar({ open: true, message: "Route created!", severity: "success" })
+      setCreateOpen(false)
+
+      setNewDate("")
+      setNewDriverName("")
+      setNewComments("")
+      setNewTruckId(null)
+
     } catch (err: any) {
-      alert(`Update failed: ${err.message || err}`)
+      setSnackbar({ open: true, message: err.message || "Create failed", severity: "error" })
+      console.log(`Failed to create row: ${err}`)
     }
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Routes</h1>
-      <button
-        className="mb-4 px-4 py-2 bg-green-600 text-white rounded"
-        onClick={() => navigate("/routes/create")}
-      >
-        Create Route
-      </button>
-      {loading && <p>Loading routes...</p>}
-      {error && <p className="text-red-600">{error}</p>}
-      {!loading && routes.length === 0 && <p>No routes found.</p>}
-      {routes.length > 0 && (
-        <table className="table-auto border border-gray-300">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border px-4 py-2">id</th>
-              <th className="border px-4 py-2">date</th>
-              <th className="border px-4 py-2">driver_name</th>
-              <th className="border px-4 py-2">comments</th>
-              <th className="border px-4 py-2">truck_id</th>
-              <th className="border px-4 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {routes.map(route => (
-              <tr key={route.id}>
-                <td className="border px-4 py-2">{route.id}</td>
-                <td className="border px-4 py-2">
-                  {route.date}
-                </td>
-                <td className="border px-4 py-2">
-                  {editingId === route.id ? (
-                    <input
-                      className="border px-1"
-                      value={editDriverName}
-                      onChange={e => setEditDriverName(e.target.value)}
-                    />
-                  ) : (
-                    route.driver_name
-                  )}
-                </td>
-                <td className="border px-4 py-2 whitespace-pre-wrap">
-                  {editingId === route.id ? (
-                    <input
-                      className="border px-1 w-full"
-                      value={editComments}
-                      onChange={e => setEditComments(e.target.value)}
-                    />
-                  ) : (
-                    route.comments
-                  )}
-                </td>
-                <td className="border px-4 py-2">
-                  {editingId === route.id ? (
-                    <input
-                      type="number"
-                      className="border px-1 w-20"
-                      value={editTruckId ?? ""}
-                      onChange={e => setEditTruckId(e.target.value ? Number(e.target.value) : null)}
-                    />
-                  ) : (
-                    route.truck_id
-                  )}
-                </td>
-                <td className="border px-4 py-2">
-                  {editingId === route.id ? (
-                    <>
-                      <button
-                        className="mr-2 px-2 py-1 bg-green-600 text-white rounded"
-                        onClick={() => saveEdit(route.id)}
-                      >
-                        Save
-                      </button>
-                      <button
-                        className="px-2 py-1 bg-gray-400 text-white rounded"
-                        onClick={cancelEdit}
-                      >
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        className="px-2 py-1 bg-blue-600 text-white rounded mr-2"
-                        onClick={() => startEdit(route)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="px-2 py-1 bg-red-600 text-white rounded"
-                        onClick={async () => {
-                          if (
-                            window.confirm(
-                              `Are you sure you want to delete route ${route.id}?`
-                            )
-                          ) {
-                            try {
-                              const res = await fetch(
-                                `http://localhost:8000/routes/${route.id}`,
-                                { method: "DELETE" }
-                              )
-                              if (!res.ok) {
-                                const err = await res.json()
-                                throw new Error(err.detail || "Delete failed")
-                              }
-                              setRoutes(routes =>
-                                routes.filter(r => r.id !== route.id)
-                              )
-                            } catch (err: any) {
-                              alert(
-                                `Delete failed: ${err.message || err.toString()}`
-                              )
-                            }
-                          }
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <Box sx={{ height: 600, width: "100%" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+        <h1 className="text-2xl font-semibold">Routes</h1>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => setCreateOpen(true)}
+        >
+          Create Route
+        </Button>
+      </Box>
+      {error && <Alert severity="error">{error}</Alert>}
+      {loading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <RouteDataGrid
+          routes={routes}
+          onEditRow={handleEditRow}
+          onDelete={handleDelete}
+          setSnackbar={setSnackbar}
+        />
       )}
-    </div>
+
+      <RouteCreateDialog
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onCreate={handleCreate}
+
+        newDate={newDate}
+        setNewDate={setNewDate}
+        
+        newDriverName={newDriverName}
+        setNewDriverName={setNewDriverName}
+        
+        newComments={newComments}
+        setNewComments={setNewComments}
+        
+        newTruckId={newTruckId}
+        setNewTruckId={setNewTruckId}
+      />
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar(s => ({ ...s, open: false }))}
+        message={snackbar.message}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      />
+    </Box>
   )
 }

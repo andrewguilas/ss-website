@@ -12,6 +12,14 @@ export interface Route {
   truck_id: number | null
 }
 
+{/*
+  id    Id
+  date    Date
+  driver_name   DriverName
+  comments    Comments
+  truck_id    TruckId
+*/}
+
 export interface Order {
   id: number
   campus: string
