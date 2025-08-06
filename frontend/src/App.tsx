@@ -2,11 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom"
 import Header from "./components/Header"
 
 import Orders from "./pages/Orders"
-import CreateOrder from "./pages/CreateOrder"
-
 import RoutesPage from "./pages/Routes"
-import CreateRoute from "./pages/CreateRoute"
-
 import Trucks from "./pages/Trucks"
 
 import CsvUploadPage from "./pages/CsvUploadPage"
@@ -17,13 +13,8 @@ function App() {
       <Route element={<Header />}>
         <Route path="/" element={<Navigate to="/orders" replace />} />
         <Route path="/orders" element={<Orders />} />
-        <Route path="/orders/create" element={<CreateOrder />} />
-
         <Route path="/routes" element={<RoutesPage />} />
-        <Route path="/routes/create" element={<CreateRoute />} />
-
         <Route path="/trucks" element={<Trucks />} />
-
         <Route path="/upload" element={<CsvUploadPage />} />
       </Route>
     </Routes>
