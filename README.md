@@ -37,6 +37,7 @@
   - [x] Refactored pages into more components
   - [ ] Add sort button in pages
   - [ ] Add filter button in pages
+  - [x] Refactored pages into more components
   - [ ] Style website
 
 ### Phase 3 – Order Photos
