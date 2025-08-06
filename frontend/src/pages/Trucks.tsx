@@ -2,20 +2,17 @@ import { useEffect, useState } from "react"
 import { Box, CircularProgress, Alert, Button, Snackbar } from "@mui/material"
 import TruckDataGrid from "../components/TruckDataGrid"
 import TruckCreateDialog from "../components/TruckCreateDialog"
-
-interface Truck {
-  id: number
-  model: string | null
-  comments: string | null
-}
+import type { Truck } from "../schemas"
 
 export default function Trucks() {
   const [trucks, setTrucks] = useState<Truck[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
+  
   const [newModel, setNewModel] = useState("")
   const [newComments, setNewComments] = useState("")
+
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
 
   useEffect(() => {

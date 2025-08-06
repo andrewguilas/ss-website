@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-
-interface Route {
-  id: number
-  date: string
-  driver_name: string | null
-  comments: string | null
-  truck_id: number | null
-}
+import type { Route } from "../schemas"
 
 export default function Routes() {
   const [routes, setRoutes] = useState<Route[]>([])
