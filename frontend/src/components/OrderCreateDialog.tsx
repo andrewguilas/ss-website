@@ -6,6 +6,9 @@ interface OrderCreateDialogProps {
   onCreate: () => void
   canCreate?: boolean // <-- add prop
 
+  newId: number | null;
+  setNewId: (id: number | null) => void; 
+
   newCampus: string
   setNewCampus: (v: string) => void
 
@@ -61,6 +64,9 @@ export default function OrderCreateDialog({
   onCreate,
   canCreate = true, // <-- default true for backward compatibility
 
+  newId,
+  setNewId,
+
   newCampus,
   setNewCampus,
 
@@ -115,6 +121,15 @@ export default function OrderCreateDialog({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Create Order</DialogTitle>
       <DialogContent>
+
+        <TextField
+          margin="dense"
+          label="Id"
+          type="number"
+          fullWidth
+          value={newId ?? ""}
+          onChange={e => setNewId(e.target.value ? Number(e.target.value) : null)}
+        />
 
         <TextField
           autoFocus

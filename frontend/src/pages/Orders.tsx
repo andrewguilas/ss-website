@@ -10,6 +10,7 @@ export default function Orders() {
   const [error, setError] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
   
+  const [newId, setNewId] = useState<number | null>(null)
   const [newCampus, setNewCampus] = useState("")
   const [newName, setNewName] = useState("")
   const [newPhone, setNewPhone] = useState("")
@@ -80,16 +81,17 @@ export default function Orders() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
+          id: newId,
           campus: newCampus,
           name: newName,
           phone: newPhone,
           pronunciation: newPronunciation,
           comments: newComments,
-          pickup_date: newPickupDate,
+          pickup_date: newPickupDate || null,
           pickup_location: newPickupLocation,
           pickup_proxy_name: newPickupProxyName,
           pickup_proxy_phone: newPickupProxyPhone,
-          dropoff_date: newDropoffDate,
+          dropoff_date: newDropoffDate || null,
           dropoff_location: newDropoffLocation,
           dropoff_proxy_name: newDropoffProxyName,
           dropoff_proxy_phone: newDropoffProxyPhone,
@@ -101,7 +103,7 @@ export default function Orders() {
       if (!res.ok) {
         const err = await res.json()
         // Format error message
-        let msg = "Failed to create order"
+        let msg = `Failed to create order: `
         if (err.detail) {
           if (Array.isArray(err.detail)) {
             msg = `${msg}: ${err.detail.map((d: any) => d.msg || JSON.stringify(d)).join("; ")}`
@@ -118,6 +120,7 @@ export default function Orders() {
       setSnackbar({ open: true, message: "Order created!", severity: "success" })
       setCreateOpen(false)
 
+      setNewId(null)
       setNewCampus("")
       setNewName("")
       setNewPhone("")
@@ -177,6 +180,9 @@ export default function Orders() {
         onCreate={handleCreate}
         canCreate={canCreate} // <-- pass prop
         
+        newId={newId}
+        setNewId={setNewId}
+
         newCampus={newCampus}
         setNewCampus={setNewCampus}
 

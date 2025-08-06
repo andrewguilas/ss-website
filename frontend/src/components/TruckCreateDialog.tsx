@@ -4,8 +4,10 @@ interface RouteCreateDialogProps {
   open: boolean
   onClose: () => void
   onCreate: () => void
+
   newModel: string
   setNewModel: (v: string) => void
+
   newComments: string
   setNewComments: (v: string) => void
 }
@@ -41,7 +43,7 @@ export default function RouteCreateDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onCreate} variant="contained" disabled={!newModel}>
+        <Button onClick={onCreate} variant="contained">
           Create
         </Button>
       </DialogActions>
