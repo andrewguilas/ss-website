@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom"
 
-export default function Layout() {
+export default function Header() {
   return (
     <div>
       <nav className="bg-gray-800 text-white px-6 py-3 flex gap-4">
