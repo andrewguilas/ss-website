@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function CsvUpload() {
+export default function CsvUploadPage() {
   const [file, setFile] = useState<File | null>(null)
   const [clearDB, setClearDB] = useState(false)
 
@@ -67,5 +67,3 @@ function CsvUpload() {
     </div>
   )
 }
-
-export default CsvUpload
