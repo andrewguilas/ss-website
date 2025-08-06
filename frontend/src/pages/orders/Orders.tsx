@@ -78,7 +78,7 @@ export default function Orders() {
         Create Order
       </button>
       {loading && <LoadingIndicator message="Loading orders..." />}
-      <ErrorMessage error={error || ""} />
+      <ErrorMessage error={error} />
       {!loading && orders.length === 0 && <p>No orders found.</p>}
       {orders.length > 0 && (
         <OrderTable
