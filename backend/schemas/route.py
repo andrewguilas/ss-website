@@ -6,6 +6,7 @@ class RouteCreate(BaseModel):
     date: date
     driver_name: Optional[str] = None
     comments: Optional[str] = None
+    truck_id: Optional[int] = None
 
 class RouteRead(RouteCreate):
     id: int

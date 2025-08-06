@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 interface Route {
   id: number
@@ -17,6 +18,8 @@ export default function Routes() {
   const [editDriverName, setEditDriverName] = useState("")
   const [editComments, setEditComments] = useState("")
   const [editTruckId, setEditTruckId] = useState<number | null>(null)
+  
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetch("http://localhost:8000/routes")
@@ -75,6 +78,12 @@ export default function Routes() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-4">Routes</h1>
+      <button
+        className="mb-4 px-4 py-2 bg-green-600 text-white rounded"
+        onClick={() => navigate("/routes/create")}
+      >
+        Create Route
+      </button>
       {loading && <p>Loading routes...</p>}
       {error && <p className="text-red-600">{error}</p>}
       {!loading && routes.length === 0 && <p>No routes found.</p>}

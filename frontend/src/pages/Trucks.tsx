@@ -11,9 +11,11 @@ export default function Trucks() {
   const [trucks, setTrucks] = useState<Truck[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editModel, setEditModel] = useState("")
   const [editComments, setEditComments] = useState("")
+  
   const navigate = useNavigate()
 
   useEffect(() => {
