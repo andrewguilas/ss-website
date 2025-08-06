@@ -17,18 +17,18 @@
 - [x] Show orders, routes, & trucks in table
 - [x] Upload .csv of raw order list
 - [x] Edit orders
-  - [ ] Add route
+  - [x] Add route
   - [x] Edit order details
-  - [ ] Delete order
+  - [x] Delete order
   - [x] Assign a route to an order
 - [ ] Edit routes
-  - [ ] Add routes
+  - [x] Add routes
   - [x] Edit routes
   - [x] Delete routes
   - [x] Assign a truck to a route
   - [ ] Reorder orders within a route
-- [ ] Edit trucks
-  - [ ] Add trucks
+- [x] Edit trucks
+  - [x] Add trucks
   - [x] Edit trucks
   - [x] Delete trucks
 - [] Other
