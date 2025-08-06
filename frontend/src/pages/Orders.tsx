@@ -129,6 +129,11 @@ export default function Orders() {
     }
   }
 
+  // Add validation for required fields
+  const canCreate =
+    newCampus.trim() !== "" &&
+    newName.trim() !== "";
+
   return (
     <Box sx={{ height: 600, width: "100%" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
@@ -159,6 +164,7 @@ export default function Orders() {
         open={createOpen}
         onClose={() => setCreateOpen(false)}
         onCreate={handleCreate}
+        canCreate={canCreate} // <-- pass prop
         
         newCampus={newCampus}
         setNewCampus={setNewCampus}
