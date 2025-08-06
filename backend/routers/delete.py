@@ -61,6 +61,28 @@ def delete_order(order_id: int, db: Session = Depends(get_db)):
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
 
+    logger.warning(
+        f'Deleting Order('
+        f'id={order.id}, '
+        f'campus="{order.campus}", '
+        f'name="{order.name}", '
+        f'phone="{order.phone}", '
+        f'pronunciation="{order.pronunciation}", '
+        f'comments="{order.comments}", '
+        f'pickup_date="{order.pickup_date}", '
+        f'pickup_location="{order.pickup_location}", '
+        f'pickup_proxy_name="{order.pickup_proxy_name}", '
+        f'pickup_proxy_phone="{order.pickup_proxy_phone}", '
+        f'dropoff_date="{order.dropoff_date}", '
+        f'dropoff_location="{order.dropoff_location}", '
+        f'dropoff_proxy_name="{order.dropoff_proxy_name}", '
+        f'dropoff_proxy_phone="{order.dropoff_proxy_phone}", '
+        f'item_count={order.item_count}, '
+        f'items="{order.items}", '
+        f'route_id={order.route_id}'
+        f')'
+    )
+
     db.delete(order)
     db.commit()
     return {"detail": f"Order {order_id} deleted"}
