@@ -49,6 +49,8 @@ def delete_route(route_id: int, db: Session = Depends(get_db)):
             detail=f"Cannot delete route {route_id} because it has assigned orders. Reassign orders first."
         )
 
+    logger.warning(f"Deleting Route(id={route.id}, date=\"{route.date}\", driver_name=\"{route.driver_name}\", comments=\"{route.comments}\", truck_id={route.truck_id})")
+
     db.delete(route)
     db.commit()
     return {"detail": f"Route {route_id} deleted"}
