@@ -1,3 +1,4 @@
+import TableActions from "../../components/TableActions"
 import type { Order } from "./Orders"
 
 interface Props {
@@ -109,21 +110,17 @@ export default function OrderRow({
         ) : order.route_id}
       </td>
       <td className="border px-4 py-2">
-        {isEditing ? (
-          <>
-            <button className="mr-2 px-2 py-1 bg-green-600 text-white rounded" onClick={() => saveEdit(order.id)}>Save</button>
-            <button className="px-2 py-1 bg-gray-400 text-white rounded" onClick={cancelEdit}>Cancel</button>
-          </>
-        ) : (
-          <>
-            <button className="px-2 py-1 bg-blue-600 text-white rounded mr-2" onClick={() => startEdit(order)}>Edit</button>
-            <button className="px-2 py-1 bg-red-600 text-white rounded" onClick={() => {
-              if (window.confirm(`Are you sure you want to delete order ${order.id}?`)) {
-                deleteOrder(order.id)
-              }
-            }}>Delete</button>
-          </>
-        )}
+        <TableActions
+          isEditing={isEditing}
+          onEdit={() => startEdit(order)}
+          onDelete={() => {
+            if (window.confirm(`Are you sure you want to delete order ${order.id}?`)) {
+              deleteOrder(order.id)
+            }
+          }}
+          onSave={() => saveEdit(order.id)}
+          onCancel={cancelEdit}
+        />
       </td>
     </tr>
   )
