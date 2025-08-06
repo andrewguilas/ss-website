@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import TruckTable from "./TruckTable"
+import LoadingIndicator from "../../components/LoadingIndicator"
+import ErrorMessage from "../../components/ErrorMessage"
 
 export interface Truck {
   id: number
@@ -82,8 +84,8 @@ export default function Trucks() {
       >
         Create Truck
       </button>
-      {loading && <p>Loading trucks...</p>}
-      {error && <p className="text-red-600">{error}</p>}
+      {loading && <LoadingIndicator message="Loading trucks..." />}
+      <ErrorMessage error={error} />
       {!loading && trucks.length === 0 && <p>No trucks found.</p>}
       {trucks.length > 0 && (
         <TruckTable

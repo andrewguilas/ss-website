@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import RouteTable from "./RouteTable"
+import LoadingIndicator from "../../components/LoadingIndicator"
+import ErrorMessage from "../../components/ErrorMessage"
 
 export interface Route {
   id: number
@@ -96,8 +98,8 @@ export default function Routes() {
       >
         Create Route
       </button>
-      {loading && <p>Loading routes...</p>}
-      {error && <p className="text-red-600">{error}</p>}
+      {loading && <LoadingIndicator message="Loading routes..." />}
+      <ErrorMessage error={error} />
       {!loading && routes.length === 0 && <p>No routes found.</p>}
       {routes.length > 0 && (
         <RouteTable

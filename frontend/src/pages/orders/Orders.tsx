@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import OrderTable from "./OrderTable"
+import LoadingIndicator from "../../components/LoadingIndicator"
+import ErrorMessage from "../../components/ErrorMessage"
 
 export interface Order {
   id: number
@@ -94,8 +96,8 @@ export default function Orders() {
       >
         Create Order
       </button>
-      {loading && <p>Loading orders...</p>}
-      {error && <p className="text-red-600">{error}</p>}
+      {loading && <LoadingIndicator message="Loading orders..." />}
+      <ErrorMessage error={error || ""} />
       {!loading && orders.length === 0 && <p>No orders found.</p>}
       {orders.length > 0 && (
         <OrderTable
