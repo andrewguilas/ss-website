@@ -100,7 +100,18 @@ export default function Orders() {
       })
       if (!res.ok) {
         const err = await res.json()
-        throw new Error(err.detail || "Failed to create order")
+        // Format error message
+        let msg = "Failed to create order"
+        if (err.detail) {
+          if (Array.isArray(err.detail)) {
+            msg = `${msg}: ${err.detail.map((d: any) => d.msg || JSON.stringify(d)).join("; ")}`
+          } else if (typeof err.detail === "string") {
+            msg = `${msg}: ${err.detail}`
+          } else if (typeof err.detail === "object") {
+            msg = `${msg}: ${JSON.stringify(err.detail)}`
+          }
+        }
+        throw new Error(msg)
       }
       const created = await res.json()
       setOrders(orders => [...orders, created])
