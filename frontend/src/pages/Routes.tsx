@@ -12,6 +12,7 @@ export default function Routes() {
   const [routes, setRoutes] = useState<Route[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editDriverName, setEditDriverName] = useState("")
   const [editComments, setEditComments] = useState("")
@@ -45,8 +46,10 @@ export default function Routes() {
   const saveEdit = async (id: number) => {
     try {
       const body: any = { id }
+
       body.driver_name = editDriverName
       body.comments = editComments
+      
       if (editTruckId !== null && editTruckId !== undefined) body.truck_id = editTruckId
 
       const res = await fetch("http://localhost:8000/routes", {
@@ -58,6 +61,7 @@ export default function Routes() {
         const errJson = await res.json().catch(() => ({}))
         throw new Error(errJson.detail || "Failed to update route")
       }
+      
       const updated = await res.json()
       setRoutes(routes =>
         routes.map(r => (r.id === id ? updated : r))
@@ -83,7 +87,7 @@ export default function Routes() {
               <th className="border px-4 py-2">driver_name</th>
               <th className="border px-4 py-2">comments</th>
               <th className="border px-4 py-2">truck_id</th>
-              <th className="border px-4 py-2"></th>
+              <th className="border px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>

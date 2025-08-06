@@ -68,7 +68,7 @@ export default function Trucks() {
               <th className="border px-4 py-2">id</th>
               <th className="border px-4 py-2">model</th>
               <th className="border px-4 py-2">comments</th>
-              <th className="border px-4 py-2"></th>
+              <th className="border px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody>
