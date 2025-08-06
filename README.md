@@ -17,18 +17,20 @@
 - [x] Show orders, routes, & trucks in table
 - [x] Upload .csv of raw order list
 - [x] Edit orders
+  - [ ] Add route
   - [x] Edit order details
+  - [ ] Delete order
   - [x] Assign a route to an order
 - [ ] Edit routes
   - [ ] Add routes
   - [x] Edit routes
-  - [ ] Delete routes
+  - [x] Delete routes
   - [x] Assign a truck to a route
   - [ ] Reorder orders within a route
 - [ ] Edit trucks
   - [ ] Add trucks
   - [x] Edit trucks
-  - [ ] Delete trucks
+  - [x] Delete trucks
 - [] Other
   - [x] Update API docs
   - [x] Create tests for route_service.py and truck_service.py
