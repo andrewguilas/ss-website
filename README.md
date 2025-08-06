@@ -36,21 +36,20 @@
   - [x] Create tests for route_service.py and truck_service.py
 
 ### Phase 3 - Frontend with MUI (due 8/7)
-- [ ] Install MUI
-- [ ] Replace existing tables with MUI Data Grid
-- [ ] Sorting
-- [ ] Filtering
-- [ ] Row editing
-- [ ] Row creation
-- [ ] Row selection with checkboxes
-- [ ] Column customization (show/hide, reordering, resizing)
-- [ ] Export to PDF to print
+- [x] Install MUI
+- [x] Replace existing tables with MUI Data Grid
+- [x] Sorting
+- [x] Filtering
+- [x] Row editing
+- [x] Row creation
+- [x] Row selection with checkboxes
+- [ ] Resize columns automatically. Text wrap if necessary.
 - [ ] Action button to open item in a new page
 - [ ] Expandable detail panel (proxies)
-- [ ] Group rows
-- [ ] Alerts
-- [ ] Icons for action buttons
+- [x] Alerts
+- [x] Icons for action buttons
 - [ ] Styling
+- [ ] Export formatted order list
 
 ### Phase 4 – Order Photos
 - [ ] Separate app to connect to storagescholars.com
