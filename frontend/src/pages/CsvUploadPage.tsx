@@ -1,20 +1,36 @@
 import { useState } from "react"
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Paper,
+  Typography,
+  Alert,
+  Stack,
+} from "@mui/material"
+import UploadFileIcon from "@mui/icons-material/UploadFile"
 
 export default function CsvUploadPage() {
   const [file, setFile] = useState<File | null>(null)
   const [clearDB, setClearDB] = useState(false)
+  const [alert, setAlert] = useState<{ type: "success" | "error"; message: string } | null>(null)
 
   const handleUpload = async () => {
-    if (!file) return alert("Please select a file")
+    setAlert(null)
+    if (!file) {
+      setAlert({ type: "error", message: "Please select a file." })
+      return
+    }
 
     if (clearDB) {
       try {
         await fetch("http://localhost:8000/clear-database", {
           method: "DELETE",
         })
-        alert("Database cleared.")
+        setAlert({ type: "success", message: "Database cleared." })
       } catch (err) {
-        alert("Failed to clear database.")
+        setAlert({ type: "error", message: "Failed to clear database." })
         return
       }
     }
@@ -29,41 +45,64 @@ export default function CsvUploadPage() {
       })
 
       const json = await res.json()
-      alert(`Inserted ${json.inserted} orders. Skipped ${json.skipped}.`)
+      setAlert({
+        type: "success",
+        message: `Inserted ${json.inserted} orders. Skipped ${json.skipped}.`,
+      })
     } catch (err) {
-      alert("Upload failed.")
+      setAlert({ type: "error", message: "Upload failed." })
     }
   }
 
   return (
-    <div className="p-4 border rounded-lg bg-white shadow">
-      <h2 className="text-xl font-semibold mb-2">Upload CSV</h2>
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+      <Paper elevation={3} sx={{ p: 4, minWidth: 350 }}>
+        <Stack spacing={2}>
+          <Typography variant="h5" fontWeight={600}>
+            Upload CSV
+          </Typography>
 
-      <div className="mb-2">
-        <label className="inline-flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={clearDB}
-            onChange={(e) => setClearDB(e.target.checked)}
+          {alert && (
+            <Alert severity={alert.type} onClose={() => setAlert(null)}>
+              {alert.message}
+            </Alert>
+          )}
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={clearDB}
+                onChange={(e) => setClearDB(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="Clear database before upload"
           />
-          Clear database before upload
-        </label>
-      </div>
 
-      <input
-        type="file"
-        accept=".csv"
-        onChange={(e) => setFile(e.target.files?.[0] || null)}
-        className="mb-2"
-      />
-      
-      <button
-        onClick={handleUpload}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Upload
-      </button>
+          <Button
+            variant="outlined"
+            component="label"
+            startIcon={<UploadFileIcon />}
+          >
+            {file ? file.name : "Select CSV File"}
+            <input
+              type="file"
+              accept=".csv"
+              hidden
+              onChange={(e) => setFile(e.target.files?.[0] || null)}
+            />
+          </Button>
 
-    </div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpload}
+            disabled={!file}
+          >
+            Upload
+          </Button>
+        </Stack>
+      </Paper>
+    </Box>
   )
 }
