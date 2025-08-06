@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { DataGrid } from "@mui/x-data-grid"
-import type { GridColDef } from "@mui/x-data-grid"
-import { IconButton, Box, CircularProgress, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Snackbar } from "@mui/material"
-import DeleteIcon from "@mui/icons-material/Delete"
-import OpenInNewIcon from "@mui/icons-material/OpenInNew"
+import { Box, CircularProgress, Alert, Button, Snackbar } from "@mui/material"
+import TruckDataGrid from "../components/TruckDataGrid"
+import TruckCreateDialog from "../components/TruckCreateDialog"
 
 interface Truck {
   id: number
@@ -19,8 +16,7 @@ export default function Trucks() {
   const [createOpen, setCreateOpen] = useState(false)
   const [newModel, setNewModel] = useState("")
   const [newComments, setNewComments] = useState("")
-  const [snackbar, setSnackbar] = useState<{open: boolean, message: string, severity: "success"|"error"}>({open: false, message: "", severity: "success"})
-  const navigate = useNavigate()
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
 
   useEffect(() => {
     fetch("http://localhost:8000/trucks")
@@ -44,9 +40,9 @@ export default function Trucks() {
       if (!res.ok) throw new Error("Failed to update truck")
       const updated = await res.json()
       setTrucks(trucks => trucks.map(t => (t.id === id ? updated : t)))
-      setSnackbar({open: true, message: "Truck updated!", severity: "success"})
+      setSnackbar({ open: true, message: "Truck updated!", severity: "success" })
     } catch (err) {
-      setSnackbar({open: true, message: "Update failed", severity: "error"})
+      setSnackbar({ open: true, message: "Update failed", severity: "error" })
     }
   }
 
@@ -59,9 +55,9 @@ export default function Trucks() {
         throw new Error(err.detail || "Delete failed")
       }
       setTrucks(trucks => trucks.filter(t => t.id !== id))
-      setSnackbar({open: true, message: "Truck deleted!", severity: "success"})
+      setSnackbar({ open: true, message: "Truck deleted!", severity: "success" })
     } catch (err: any) {
-      setSnackbar({open: true, message: err.message || "Delete failed", severity: "error"})
+      setSnackbar({ open: true, message: err.message || "Delete failed", severity: "error" })
     }
   }
 
@@ -78,47 +74,14 @@ export default function Trucks() {
       }
       const created = await res.json()
       setTrucks(trucks => [...trucks, created])
-      setSnackbar({open: true, message: "Truck created!", severity: "success"})
+      setSnackbar({ open: true, message: "Truck created!", severity: "success" })
       setCreateOpen(false)
       setNewModel("")
       setNewComments("")
     } catch (err: any) {
-      setSnackbar({open: true, message: err.message || "Create failed", severity: "error"})
+      setSnackbar({ open: true, message: err.message || "Create failed", severity: "error" })
     }
   }
-
-  const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 90 },
-    { field: "model", headerName: "Model", flex: 1, editable: true },
-    { field: "comments", headerName: "Comments", flex: 2, editable: true },
-    {
-      field: "actions",
-      headerName: "Actions",
-      width: 140,
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => (
-        <Box>
-          <IconButton
-            color="primary"
-            size="small"
-            onClick={() => navigate(`/trucks/${params.row.id}`)}
-            title="Open"
-          >
-            <OpenInNewIcon />
-          </IconButton>
-          <IconButton
-            color="error"
-            size="small"
-            onClick={() => handleDelete(params.row.id)}
-            title="Delete"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Box>
-      ),
-    },
-  ]
 
   return (
     <Box sx={{ height: 600, width: "100%" }}>
@@ -138,50 +101,24 @@ export default function Trucks() {
           <CircularProgress />
         </Box>
       ) : (
-        <DataGrid
-          rows={trucks}
-          columns={columns}
-          checkboxSelection
-          disableRowSelectionOnClick
-          editMode="row"
-          processRowUpdate={async (newRow) => {
-            await handleEditRow(newRow)
-            return newRow
-          }}
-          onProcessRowUpdateError={(err) => setSnackbar({open: true, message: `Edit failed: ${err}`, severity: "error"})}
-          showToolbar
+        <TruckDataGrid
+          trucks={trucks}
+          onEditRow={handleEditRow}
+          onDelete={handleDelete}
+          setSnackbar={setSnackbar}
         />
       )}
 
-      {/* Create Truck Dialog */}
-      <Dialog open={createOpen} onClose={() => setCreateOpen(false)}>
-        <DialogTitle>Create Truck</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Model"
-            fullWidth
-            value={newModel}
-            onChange={e => setNewModel(e.target.value)}
-          />
-          <TextField
-            margin="dense"
-            label="Comments"
-            fullWidth
-            value={newComments}
-            onChange={e => setNewComments(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setCreateOpen(false)}>Cancel</Button>
-          <Button onClick={handleCreate} variant="contained" disabled={!newModel}>
-            Create
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <TruckCreateDialog
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onCreate={handleCreate}
+        newModel={newModel}
+        setNewModel={setNewModel}
+        newComments={newComments}
+        setNewComments={setNewComments}
+      />
 
-      {/* Snackbar for feedback */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}
