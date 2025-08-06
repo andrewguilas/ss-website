@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+import logging
 
 from backend.database import get_db
 from backend.models.truck import Truck
 from backend.models.route import Route
 from backend.models.order import Order
 
+logger = logging.getLogger(__name__)
 router = APIRouter()
 
 def has_orders(db, route_id):
@@ -30,6 +32,7 @@ def delete_truck(truck_id: int, db: Session = Depends(get_db)):
             detail=f"Cannot delete truck {truck_id}. Route {first_route_id_with_orders} has assigned orders. Reassign orders first."
         )
 
+    logger.warning(f"Deleting Truck(id={truck.id}, model={truck.model}, comments={truck.comments})")
     db.delete(truck)
     db.commit()
     return {"detail": f"Truck {truck_id} deleted"}
