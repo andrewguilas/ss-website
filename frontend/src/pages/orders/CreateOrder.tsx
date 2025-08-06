@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import FormField from "../../components/FormField"
 
 export default function CreateOrder() {
   const [id, setId] = useState<number | "">("")
@@ -65,142 +66,93 @@ export default function CreateOrder() {
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Create Order</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm mb-1">Order ID</label>
-          <input
-            type="number"
-            className="border px-2 py-1 rounded w-full"
-            value={id}
-            onChange={e => setId(e.target.value ? Number(e.target.value) : "")}
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Campus</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={campus}
-            onChange={e => setCampus(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Name</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Phone</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={phone}
-            onChange={e => setPhone(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Pronunciation</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={pronunciation}
-            onChange={e => setPronunciation(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Comments</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={comments}
-            onChange={e => setComments(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Pickup Date</label>
-          <input
-            type="date"
-            className="border px-2 py-1 rounded w-full"
-            value={pickupDate}
-            onChange={e => setPickupDate(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Pickup Location</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={pickupLocation}
-            onChange={e => setPickupLocation(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Pickup Proxy Name</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={pickupProxyName}
-            onChange={e => setPickupProxyName(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Pickup Proxy Phone</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={pickupProxyPhone}
-            onChange={e => setPickupProxyPhone(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Dropoff Date</label>
-          <input
-            type="date"
-            className="border px-2 py-1 rounded w-full"
-            value={dropoffDate}
-            onChange={e => setDropoffDate(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Dropoff Location</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={dropoffLocation}
-            onChange={e => setDropoffLocation(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Dropoff Proxy Name</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={dropoffProxyName}
-            onChange={e => setDropoffProxyName(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Dropoff Proxy Phone</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={dropoffProxyPhone}
-            onChange={e => setDropoffProxyPhone(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Item Count</label>
-          <input
-            type="number"
-            className="border px-2 py-1 rounded w-full"
-            value={itemCount}
-            onChange={e => setItemCount(e.target.value ? Number(e.target.value) : "")}
-            min={0}
-          />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">Items</label>
-          <input
-            className="border px-2 py-1 rounded w-full"
-            value={items}
-            onChange={e => setItems(e.target.value)}
-          />
-        </div>
+        <FormField
+          label="Order ID"
+          value={id}
+          onChange={e => setId(e.target.value ? Number(e.target.value) : "")}
+          type="number"
+          required
+        />
+        <FormField
+          label="Campus"
+          value={campus}
+          onChange={e => setCampus(e.target.value)}
+          required
+        />
+        <FormField
+          label="Name"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          required
+        />
+        <FormField
+          label="Phone"
+          value={phone}
+          onChange={e => setPhone(e.target.value)}
+        />
+        <FormField
+          label="Pronunciation"
+          value={pronunciation}
+          onChange={e => setPronunciation(e.target.value)}
+        />
+        <FormField
+          label="Comments"
+          value={comments}
+          onChange={e => setComments(e.target.value)}
+        />
+        <FormField
+          label="Pickup Date"
+          value={pickupDate}
+          onChange={e => setPickupDate(e.target.value)}
+          type="date"
+        />
+        <FormField
+          label="Pickup Location"
+          value={pickupLocation}
+          onChange={e => setPickupLocation(e.target.value)}
+        />
+        <FormField
+          label="Pickup Proxy Name"
+          value={pickupProxyName}
+          onChange={e => setPickupProxyName(e.target.value)}
+        />
+        <FormField
+          label="Pickup Proxy Phone"
+          value={pickupProxyPhone}
+          onChange={e => setPickupProxyPhone(e.target.value)}
+        />
+        <FormField
+          label="Dropoff Date"
+          value={dropoffDate}
+          onChange={e => setDropoffDate(e.target.value)}
+          type="date"
+        />
+        <FormField
+          label="Dropoff Location"
+          value={dropoffLocation}
+          onChange={e => setDropoffLocation(e.target.value)}
+        />
+        <FormField
+          label="Dropoff Proxy Name"
+          value={dropoffProxyName}
+          onChange={e => setDropoffProxyName(e.target.value)}
+        />
+        <FormField
+          label="Dropoff Proxy Phone"
+          value={dropoffProxyPhone}
+          onChange={e => setDropoffProxyPhone(e.target.value)}
+        />
+        <FormField
+          label="Item Count"
+          value={itemCount}
+          onChange={e => setItemCount(e.target.value ? Number(e.target.value) : "")}
+          type="number"
+        />
+        <FormField
+          label="Items"
+          value={items}
+          onChange={e => setItems(e.target.value)}
+        />
         {error && <p className="text-red-600">{error}</p>}
         <div className="flex gap-2">
           <button
