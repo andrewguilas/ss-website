@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom"
 import { DataGrid } from "@mui/x-data-grid"
 import type { GridColDef } from "@mui/x-data-grid"
 import { IconButton, Box, CircularProgress, Alert } from "@mui/material"
-import EditIcon from "@mui/icons-material/Edit"
 import DeleteIcon from "@mui/icons-material/Delete"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 
@@ -17,7 +16,6 @@ export default function Trucks() {
   const [trucks, setTrucks] = useState<Truck[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [editRowsModel, setEditRowsModel] = useState({})
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -80,14 +78,6 @@ export default function Trucks() {
             title="Open"
           >
             <OpenInNewIcon />
-          </IconButton>
-          <IconButton
-            color="primary"
-            size="small"
-            onClick={() => navigate(`/trucks/create?id=${params.row.id}`)}
-            title="Edit"
-          >
-            <EditIcon />
           </IconButton>
           <IconButton
             color="error"
