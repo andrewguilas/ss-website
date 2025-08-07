@@ -34,12 +34,12 @@ export default function Routes() {
       })
       .finally(() => setLoading(false))
 
-    // Fetch trucks for the select field
     fetch("http://localhost:8000/trucks")
       .then(res => res.json())
       .then(data => setTrucks(data))
       .catch(err => {
-        // Optionally handle truck fetch error
+        setError("Failed to fetch trucks.")
+        console.log(`Failed to fetch truck: ${err}`)
       })
   }, [])
 
@@ -112,7 +112,6 @@ export default function Routes() {
     }
   }
 
-  // --- Add these for edit dialog ---
   const openEditDialog = (route: Route) => {
     setEditRoute(route)
     setEditDate(route.date || "")
@@ -146,7 +145,6 @@ export default function Routes() {
       setSnackbar({ open: true, message: "Update failed", severity: "error" })
     }
   }
-  // --- end edit dialog logic ---
 
   return (
     <Box sx={{ height: 600, width: "100%" }}>
@@ -178,11 +176,10 @@ export default function Routes() {
         newDriverName={newDriverName} setNewDriverName={setNewDriverName}
         newComments={newComments} setNewComments={setNewComments}
         newTruckId={newTruckId} setNewTruckId={setNewTruckId}
-        trucks={trucks} // <-- Pass trucks here
-        mode="create" // <-- add this line
+        trucks={trucks}
+        mode="create"
       />
 
-      {/* Edit Dialog */}
       <RouteCreateDialog
         open={editOpen}
         onClose={() => setEditOpen(false)}
@@ -191,8 +188,8 @@ export default function Routes() {
         newDriverName={editDriverName} setNewDriverName={setEditDriverName}
         newComments={editComments} setNewComments={setEditComments}
         newTruckId={editTruckId} setNewTruckId={setEditTruckId}
-        trucks={trucks} // <-- Pass trucks here
-        mode="edit" // <-- add this line
+        trucks={trucks}
+        mode="edit" 
       />
 
       <Snackbar

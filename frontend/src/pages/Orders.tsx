@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { Box, CircularProgress, Alert, Button, Snackbar } from "@mui/material"
-import EditIcon from "@mui/icons-material/Edit"
 import OrderDataGrid from "../components/OrderDataGrid"
 import OrderCreateDialog from "../components/OrderCreateDialog"
 import type { Order, Route } from "../schemas"
@@ -66,7 +65,8 @@ export default function Orders() {
       .then(res => res.json())
       .then(data => setRoutes(data))
       .catch(err => {
-        // Optionally handle route fetch error
+        setError("Failed to fetch routes.")
+        console.log(`Failed to fetch route: ${err}`)
       })
   }, [])
 
@@ -170,7 +170,6 @@ export default function Orders() {
     }
   }
 
-  // --- Edit dialog logic ---
   const openEditDialog = (order: Order) => {
     setEditOrder(order)
     setEditId(order.id ?? null)
@@ -229,7 +228,6 @@ export default function Orders() {
       setSnackbar({ open: true, message: "Update failed", severity: "error" })
     }
   }
-  // --- end edit dialog logic ---
 
   return (
     <Box sx={{ height: 600, width: "100%" }}>

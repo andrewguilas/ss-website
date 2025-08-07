@@ -1,10 +1,8 @@
 import { DataGrid } from "@mui/x-data-grid"
 import { Box, IconButton, MenuItem, Select } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
-import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 import EditIcon from "@mui/icons-material/Edit"
 import type { GridColDef } from "@mui/x-data-grid"
-import { useNavigate } from "react-router-dom"
 import type { Order, Route } from "../schemas"
 
 interface OrderDataGridProps {
@@ -13,7 +11,7 @@ interface OrderDataGridProps {
   onDelete: (id: number) => void
   setSnackbar: (snackbar: { open: boolean; message: string; severity: "success" | "error" }) => void
   onEditDialog: (order: Order) => void
-  routes?: Route[] // <-- Add this prop
+  routes?: Route[]
 }
 
 function renderWrappedCell(params: any) {
@@ -34,8 +32,6 @@ function renderWrappedCell(params: any) {
 }
 
 export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar, onEditDialog, routes = [] }: OrderDataGridProps) {
-  const navigate = useNavigate()
-
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", minWidth: 60, flex: 0 },
     { field: "name", headerName: "Name", minWidth: 180, flex: 1, editable: true },
@@ -84,12 +80,6 @@ export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar
       filterable: false,
       renderCell: (params) => (
         <Box>
-          <IconButton
-            color="primary"
-            size="small"
-            onClick={() => navigate(`/orders/${params.row.id}`)}
-            title="Open"
-          ><OpenInNewIcon /></IconButton>
           <IconButton
             color="primary"
             size="small"

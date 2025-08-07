@@ -10,7 +10,7 @@ interface RouteCreateDialogProps {
   newDriverName: string; setNewDriverName: (v: string) => void
   newComments: string; setNewComments: (v: string) => void
   newTruckId: number | null; setNewTruckId: (id: number | null) => void
-  trucks?: Truck[] // <-- Add this prop
+  trucks?: Truck[]
   mode?: "create" | "edit"
 }
 

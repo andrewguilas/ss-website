@@ -23,7 +23,7 @@ interface OrderCreateDialogProps {
   newItemCount: number | null; setNewItemCount: (id: number | null) => void; 
   newItems: string; setNewItems: (v: string) => void
   newRouteId: number | null; setNewRouteId: (id: number | null) => void; 
-  routes?: Route[] // <-- Add this prop
+  routes?: Route[]
   mode?: "create" | "edit"
 }
 

@@ -11,7 +11,7 @@ interface RouteDataGridProps {
   onDelete: (id: number) => void
   setSnackbar: (snackbar: { open: boolean; message: string; severity: "success" | "error" }) => void
   onEditDialog: (route: Route) => void
-  trucks?: Truck[] // <-- Add this prop
+  trucks?: Truck[]
 }
 
 function renderWrappedCell(params: any) {
@@ -36,15 +36,7 @@ export default function RouteDataGrid({ routes, onEditRow, onDelete, setSnackbar
     { field: "id", headerName: "ID", minWidth: 60, flex: 0 },
     { field: "date", headerName: "Date", minWidth: 120, flex: 1 },
     { field: "driver_name", headerName: "Driver Name", minWidth: 180, flex: 1, editable: true },
-    {
-      field: "comments",
-      headerName: "Comments",
-      minWidth: 120,
-      flex: 2,
-      editable: true,
-      renderCell: renderWrappedCell,
-      cellClassName: "wrap-cell",
-    },
+    { field: "comments", headerName: "Comments", minWidth: 120, flex: 2, editable: true, renderCell: renderWrappedCell, cellClassName: "wrap-cell" },
     {
       field: "truck_id",
       headerName: "Truck ID",
