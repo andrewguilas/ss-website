@@ -49,13 +49,14 @@
 - [x] Alerts
 - [x] Icons for action buttons
 - [x] Styling
-- [ ] Reorder orders within a route
+- [x] Reorder orders within a route
 - [ ] Export route manifest
 
 ### Phase 4 – Order Photos
 - [ ] Separate app to connect to storagescholars.com
   - [ ] Pull orders from website
   - [ ] Download order photos
+  - [ ] Get order location in storage unit
   - [ ] Set up AWS to save photos (if needed)
 - [ ] Bridge ss-website.com and storagescholars.com
   - [ ] Match each order
