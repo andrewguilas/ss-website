@@ -6,14 +6,33 @@ import logging
 from backend.models.order import Order
 from backend.models.route import Route
 from backend.services.route_service import create_route
+from backend.utils.openai import ask_openai
+from backend.utils.parsing import parse_phone
 
 logger = logging.getLogger(__name__)
+
+def fetch_pronunciation(full_name):
+    first_name = full_name.split(" ")[0]
+    try:
+        return ask_openai(f"In one word, no fluff, give me the pronunciation of the first name {first_name}")
+    except Exception:
+        return
+
+def get_comments(dropoff_proxy_name=None, dropoff_proxy_phone=None):
+    comments = []
+    if dropoff_proxy_name and dropoff_proxy_phone:
+        dropoff_proxy_phone = parse_phone(dropoff_proxy_phone)
+        comments.append(f"Call Proxy {dropoff_proxy_name} at {dropoff_proxy_phone}.")
+    return "\n".join(comments)
 
 def create_order(db: Session, order_data: dict) -> Order:
     try:
         existing_order = db.query(Order).filter(Order.id == order_data["id"]).first()
         if existing_order:
             raise Exception("Order already exists")
+
+        order_data["pronunciation"] = fetch_pronunciation(order_data["name"])
+        order_data["comments"] = get_comments(order_data["dropoff_proxy_name"], order_data["dropoff_proxy_phone"])
 
         route_id = None
         date = order_data.get("dropoff_date")
