@@ -49,7 +49,8 @@
 - [x] Alerts
 - [x] Icons for action buttons
 - [x] Styling
-- [ ] Export formatted order list
+- [ ] Reorder orders within a route
+- [ ] Export route manifest
 
 ### Phase 4 – Order Photos
 - [ ] Separate app to connect to storagescholars.com
