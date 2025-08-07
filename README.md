@@ -89,6 +89,11 @@ OPENAI_API_KEY=
 > pip install -r requirements.txt
 ```
 
+1.3 Create database
+```
+> py -m backend.main
+```
+
 #### 2. In terminal 2 (frontend)
 2.1 Install libraries
 ```
