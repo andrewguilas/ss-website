@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from backend.database import get_db
@@ -10,7 +10,12 @@ router = APIRouter()
 
 @router.get("/orders")
 def get_orders(db: Session = Depends(get_db)):
-    return db.query(Order).all()
+    return (
+        db.query(Order)
+        .join(Route)
+        .order_by(Route.date, Order.order_in_route)
+        .all()
+    )
 
 @router.get("/routes")
 def get_routes(db: Session = Depends(get_db)):
