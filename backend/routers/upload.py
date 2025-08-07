@@ -10,27 +10,12 @@ from backend.models.order import Order
 from backend.models.route import Route
 from backend.models.truck import Truck
 from backend.utils.parsing import parse_int, parse_location, parse_phone, parse_date
-from backend.utils.openai import ask_openai
 from backend.services.order_service import create_order
 
 CAMPUS = "University of Virginia"
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
-
-def fetch_pronunciation(full_name):
-    first_name = full_name.split(" ")[0]
-    try:
-        return ask_openai(f"In one word, no fluff, give me the pronunciation of the first name {first_name}")
-    except Exception:
-        return
-
-def get_comments(dropoff_proxy_name=None, dropoff_proxy_phone=None):
-    comments = []
-    if dropoff_proxy_name and dropoff_proxy_phone:
-        dropoff_proxy_phone = parse_phone(dropoff_proxy_phone)
-        comments.append(f"Call Proxy {dropoff_proxy_name} at {dropoff_proxy_phone}.")
-    return "\n".join(comments)
 
 @router.post("/upload-orders")
 async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_db)):
@@ -61,8 +46,6 @@ async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_
                     "campus": campus,
                     "name": row.get("FullName"),
                     "phone": parse_phone(row.get("StudentPhone")) if row.get("StudentPhone") else None,
-                    "pronunciation": fetch_pronunciation(row.get("FullName")) if row.get("FullName") else None,
-                    "comments": get_comments(dropoff_proxy_name=row.get("DropoffPersonName"), dropoff_proxy_phone=row.get("DropoffPersonPhone")),
                     "pickup_date": parse_date(row.get("PickupDate")),
                     "pickup_location": parse_location(row.get("PickupLocation"), row.get("PickupDormRoomNumber"), row.get("PickupDormRoomLetter"), row.get("PickupAddress"), row.get("PickupAddressLine2")),
                     "pickup_proxy_name": row.get("PickupPersonName"),

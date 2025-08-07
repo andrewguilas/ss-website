@@ -1,32 +1,20 @@
 import { Routes, Route, Navigate } from "react-router-dom"
-import Layout from "./components/Layout"
+import Header from "./components/Header"
 
-import Orders from "./pages/orders/Orders"
-import CreateOrder from "./pages/orders/CreateOrder"
+import Orders from "./pages/Orders"
+import RoutesPage from "./pages/Routes"
+import Trucks from "./pages/Trucks"
 
-import RoutesPage from "./pages/routes/Routes"
-import CreateRoute from "./pages/routes/CreateRoute"
-
-import Trucks from "./pages/trucks/Trucks"
-import CreateTruck from "./pages/trucks/CreateTruck"
-
-import CsvUploadPage from "./pages/upload/CsvUploadPage"
+import CsvUploadPage from "./pages/CsvUploadPage"
 
 function App() {
   return (
     <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<CsvUploadPage />} />
-
+      <Route element={<Header />}>
+        <Route path="/" element={<Navigate to="/orders" replace />} />
         <Route path="/orders" element={<Orders />} />
-        <Route path="/orders/create" element={<CreateOrder />} />
-
         <Route path="/routes" element={<RoutesPage />} />
-        <Route path="/routes/create" element={<CreateRoute />} />
-
         <Route path="/trucks" element={<Trucks />} />
-        <Route path="/trucks/create" element={<CreateTruck />} />
-
         <Route path="/upload" element={<CsvUploadPage />} />
       </Route>
     </Routes>

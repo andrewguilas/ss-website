@@ -33,8 +33,6 @@ def create_route(db: Session, route_data: dict) -> Route:
         if not date:
             raise Exception("Missing order date.")
 
-        print(route_data)
-
         custom_truck_id = route_data.get("truck_id")
         if custom_truck_id:
             conflicting_truck = (
