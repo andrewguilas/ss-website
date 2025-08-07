@@ -1,46 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from pydantic import BaseModel
-from typing import Optional
-from datetime import date as date_class
+
 
 from backend.database import get_db
 from backend.models.order import Order
 from backend.models.route import Route
 from backend.models.truck import Truck
 from backend.utils.parsing import parse_phone
+from backend.schemas.order import OrderUpdate
+from backend.schemas.route import RouteUpdate
+from backend.schemas.truck import TruckUpdate
 
 router = APIRouter()
-
-class OrderUpdate(BaseModel):
-    id: int
-    campus: Optional[str] = None
-    name: Optional[str] = None
-    phone: Optional[str] = None
-    pronunciation: Optional[str] = None
-    comments: Optional[str] = None
-    pickup_date: Optional[date_class] = None
-    pickup_location: Optional[str] = None
-    pickup_proxy_name: Optional[str] = None
-    pickup_proxy_phone: Optional[str] = None
-    dropoff_date: Optional[date_class] = None
-    dropoff_location: Optional[str] = None
-    dropoff_proxy_name: Optional[str] = None
-    dropoff_proxy_phone: Optional[str] = None
-    item_count: Optional[int] = None
-    items: Optional[str] = None
-    route_id: Optional[int] = None
-
-class RouteUpdate(BaseModel):
-    id: int
-    driver_name: Optional[str] = None
-    comments: Optional[str] = None
-    truck_id: Optional[int] = None
-
-class TruckUpdate(BaseModel):
-    id: int
-    model: Optional[str] = None
-    comments: Optional[str] = None
 
 def get_order_or_404(db, order_id):
     order = db.query(Order).filter(Order.id == order_id).first()

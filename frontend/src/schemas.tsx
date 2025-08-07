@@ -30,4 +30,5 @@ export interface Order {
   item_count: number | null
   items: string | null
   route_id: number | null
+  order_in_route: number | null
 }

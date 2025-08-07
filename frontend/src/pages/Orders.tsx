@@ -29,7 +29,8 @@ export default function Orders() {
   const [newItemCount, setNewItemCount] = useState<number | null>(null)
   const [newItems, setNewItems] = useState("")
   const [newRouteId, setNewRouteId] = useState<number | null>(null)
-  
+  const [newOrderInRoute, setNewOrderInRoute] = useState<number | null>(null)
+
   const [editOrder, setEditOrder] = useState<Order | null>(null)
   const [editId, setEditId] = useState<number | null>(null)
   const [editCampus, setEditCampus] = useState("")
@@ -48,7 +49,8 @@ export default function Orders() {
   const [editItemCount, setEditItemCount] = useState<number | null>(null)
   const [editItems, setEditItems] = useState("")
   const [editRouteId, setEditRouteId] = useState<number | null>(null)
-  
+  const [editOrderInRoute, setEditOrderInRoute] = useState<number | null>(null)
+
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
 
   useEffect(() => {
@@ -126,7 +128,8 @@ export default function Orders() {
           dropoff_proxy_phone: newDropoffProxyPhone,
           item_count: newItemCount,
           items: newItems,
-          route_id: newRouteId
+          route_id: newRouteId,
+          order_in_route: newOrderInRoute
         })
       })
       if (!res.ok) {
@@ -164,6 +167,7 @@ export default function Orders() {
       setNewItemCount(null)
       setNewItems("")
       setNewRouteId(null)
+      setNewOrderInRoute(null)
     } catch (err: any) {
       setSnackbar({ open: true, message: err.message || "Create failed", severity: "error" })
       console.log(`Failed to create row: ${err}`)
@@ -189,6 +193,7 @@ export default function Orders() {
     setEditItemCount(order.item_count ?? null)
     setEditItems(order.items ?? "")
     setEditRouteId(order.route_id ?? null)
+    setEditOrderInRoute(order.order_in_route ?? null)
     setEditOpen(true)
   }
 
@@ -215,7 +220,8 @@ export default function Orders() {
           dropoff_proxy_phone: editDropoffProxyPhone,
           item_count: editItemCount,
           items: editItems,
-          route_id: editRouteId
+          route_id: editRouteId,
+          order_in_route: editOrderInRoute
         }),
       })
       if (!res.ok) throw new Error("Failed to update order")
@@ -273,6 +279,8 @@ export default function Orders() {
         newItemCount={newItemCount} setNewItemCount={setNewItemCount}
         newItems={newItems} setNewItems={setNewItems}
         newRouteId={newRouteId} setNewRouteId={setNewRouteId}
+        newOrderInRoute={newOrderInRoute} setNewOrderInRoute={setNewOrderInRoute}
+
         routes={routes}
         mode="create"
       />
@@ -300,6 +308,8 @@ export default function Orders() {
         newItemCount={editItemCount} setNewItemCount={setEditItemCount}
         newItems={editItems} setNewItems={setEditItems}
         newRouteId={editRouteId} setNewRouteId={setEditRouteId}
+        newOrderInRoute={editOrderInRoute} setNewOrderInRoute={setEditOrderInRoute}
+
         routes={routes}
         mode="edit"
       />

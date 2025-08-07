@@ -38,8 +38,6 @@ export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar
     { field: "phone", headerName: "Phone", minWidth: 120, flex: 1, editable: true },
     { field: "pronunciation", headerName: "Pronunciation", minWidth: 180, flex: 1, editable: true },
     { field: "comments", headerName: "Comments", minWidth: 180, flex: 2, editable: true, renderCell: renderWrappedCell, cellClassName: "wrap-cell"},
-    // { field: "pickup_date", headerName: "Pickup Date", minWidth: 120, flex: 1, editable: true },
-    // { field: "pickup_location", headerName: "Pickup Location", minWidth: 180, flex: 1, editable: true },
     { field: "dropoff_date", headerName: "Dropoff Date", minWidth: 120, flex: 1, editable: true },
     { field: "dropoff_location", headerName: "Dropoff Location", minWidth: 180, flex: 1, editable: true },
     { field: "item_count", headerName: "Item Count", minWidth: 60, flex: 0, editable: true, type: "number"},
@@ -71,6 +69,7 @@ export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar
         </Select>
       ),
     },
+    { field: "order_in_route", headerName: "Order", minWidth: 60, flex: 0, editable: true, type: "number" },
     {
       field: "actions",
       headerName: "Actions",

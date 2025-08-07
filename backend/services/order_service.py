@@ -1,6 +1,7 @@
 # Handles smart creation of orders
 
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 import logging
 
 from backend.models.order import Order
@@ -35,6 +36,7 @@ def create_order(db: Session, order_data: dict) -> Order:
         order_data["comments"] = get_comments(order_data["dropoff_proxy_name"], order_data["dropoff_proxy_phone"])
 
         route_id = None
+        order_in_route = None
         date = order_data.get("dropoff_date")
         if date:
             first_available_route = db.query(Route).filter(Route.date == date).order_by(Route.id).first()
@@ -44,6 +46,9 @@ def create_order(db: Session, order_data: dict) -> Order:
                 )
                 logger.debug(f"Auto-generated route {first_available_route.id} for order on date {date}")
             route_id = first_available_route.id
+
+            max_order = db.query(func.max(Order.order_in_route)).filter(Order.route_id == route_id).scalar()
+            order_data["order_in_route"] = (max_order or 0) + 1
 
         new_order = Order(**order_data, route_id=route_id)
         db.add(new_order)
