@@ -48,9 +48,9 @@ def create_order(db: Session, order_data: dict) -> Order:
             route_id = first_available_route.id
 
             max_order = db.query(func.max(Order.order_in_route)).filter(Order.route_id == route_id).scalar()
-            order_in_route = (max_order or 0) + 1
+            order_data["order_in_route"] = (max_order or 0) + 1
 
-        new_order = Order(**order_data, route_id=route_id, order_in_route=order_in_route)
+        new_order = Order(**order_data, route_id=route_id)
         db.add(new_order)
         db.commit()
         db.refresh(new_order)
