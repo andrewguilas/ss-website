@@ -52,161 +52,27 @@ export default function OrderCreateDialog({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Create Order</DialogTitle>
       <DialogContent>
-
-        <TextField
-          margin="dense"
-          label="Id"
-          type="number"
-          fullWidth
-          value={newId ?? ""}
-          onChange={e => setNewId(e.target.value ? Number(e.target.value) : null)}
-        />
-
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Campus"
-          fullWidth
-          value={newCampus}
-          onChange={e => setNewCampus(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Name"
-          fullWidth
-          value={newName}
-          onChange={e => setNewName(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Phone"
-          fullWidth
-          value={newPhone}
-          onChange={e => setNewPhone(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Pronunciation"
-          fullWidth
-          value={newPronunciation}
-          onChange={e => setNewPronunciation(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Comments"
-          fullWidth
-          value={newComments}
-          onChange={e => setNewComments(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Pickup Date"
-          type="date"
-          fullWidth
-          value={newPickupDate}
-          onChange={e => setNewPickupDate(e.target.value)}
-          slotProps={{ inputLabel: { shrink: true } }}
-        />
-
-        <TextField
-          margin="dense"
-          label="Pickup Location"
-          fullWidth
-          value={newPickupLocation}
-          onChange={e => setNewPickupLocation(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Pickup Proxy Name"
-          fullWidth
-          value={newPickupProxyName}
-          onChange={e => setNewPickupProxyName(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Pickup Proxy Phone"
-          fullWidth
-          value={newPickupProxyPhone}
-          onChange={e => setNewPickupProxyPhone(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Dropoff Date"
-          type="date"
-          fullWidth
-          value={newDropoffDate}
-          onChange={e => setNewDropoffDate(e.target.value)}
-          slotProps={{ inputLabel: { shrink: true } }}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Dropoff Location"
-          fullWidth
-          value={newDropoffLocation}
-          onChange={e => setNewDropoffLocation(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Dropoff Proxy Name"
-          fullWidth
-          value={newDropoffProxyName}
-          onChange={e => setNewDropoffProxyName(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Dropoff Proxy Phone"
-          fullWidth
-          value={newDropoffProxyPhone}
-          onChange={e => setNewDropoffProxyPhone(e.target.value)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Item Count"
-          type="number"
-          fullWidth
-          value={newItemCount ?? ""}
-          onChange={e => setNewItemCount(e.target.value ? Number(e.target.value) : null)}
-        />
-        
-        <TextField
-          margin="dense"
-          label="Items"
-          fullWidth
-          value={newItems}
-          onChange={e => setNewItems(e.target.value)}
-        />
-
-        <TextField
-          margin="dense"
-          label="Route ID"
-          type="number"
-          fullWidth
-          value={newRouteId ?? ""}
-          onChange={e => setNewRouteId(e.target.value ? Number(e.target.value) : null)}
-        />
-
+        <TextField margin="dense" label="Id" type="number" fullWidth value={newId ?? ""} onChange={e => setNewId(e.target.value ? Number(e.target.value) : null)} />
+        <TextField autoFocus margin="dense" label="Campus" fullWidth value={newCampus} onChange={e => setNewCampus(e.target.value)} />
+        <TextField margin="dense" label="Name" fullWidth value={newName} onChange={e => setNewName(e.target.value)} />
+        <TextField margin="dense" label="Phone" fullWidth value={newPhone} onChange={e => setNewPhone(e.target.value)} />
+        <TextField margin="dense" label="Pronunciation" fullWidth value={newPronunciation} onChange={e => setNewPronunciation(e.target.value)} />
+        <TextField margin="dense" label="Comments" fullWidth value={newComments} onChange={e => setNewComments(e.target.value)} />
+        <TextField margin="dense" label="Pickup Date" type="date" fullWidth value={newPickupDate} onChange={e => setNewPickupDate(e.target.value)} slotProps={{ inputLabel: { shrink: true } }} />
+        <TextField margin="dense" label="Pickup Location" fullWidth value={newPickupLocation} onChange={e => setNewPickupLocation(e.target.value)} />
+        <TextField margin="dense" label="Pickup Proxy Name" fullWidth value={newPickupProxyName} onChange={e => setNewPickupProxyName(e.target.value)} />
+        <TextField margin="dense" label="Pickup Proxy Phone" fullWidth value={newPickupProxyPhone} onChange={e => setNewPickupProxyPhone(e.target.value)} />
+        <TextField margin="dense" label="Dropoff Date" type="date" fullWidth value={newDropoffDate} onChange={e => setNewDropoffDate(e.target.value)} slotProps={{ inputLabel: { shrink: true } }} />
+        <TextField margin="dense" label="Dropoff Location" fullWidth value={newDropoffLocation} onChange={e => setNewDropoffLocation(e.target.value)} />
+        <TextField margin="dense" label="Dropoff Proxy Name" fullWidth value={newDropoffProxyName} onChange={e => setNewDropoffProxyName(e.target.value)} />
+        <TextField margin="dense" label="Dropoff Proxy Phone" fullWidth value={newDropoffProxyPhone} onChange={e => setNewDropoffProxyPhone(e.target.value)} />
+        <TextField margin="dense" label="Item Count" type="number" fullWidth value={newItemCount ?? ""} onChange={e => setNewItemCount(e.target.value ? Number(e.target.value) : null)} />
+        <TextField margin="dense" label="Items" fullWidth value={newItems} onChange={e => setNewItems(e.target.value)} />
+        <TextField margin="dense" label="Route ID" type="number" fullWidth value={newRouteId ?? ""} onChange={e => setNewRouteId(e.target.value ? Number(e.target.value) : null)} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button
-          onClick={onCreate}
-          variant="contained"
-          disabled={!canCreate} // <-- disable if not valid
-        >
-          Create
-        </Button>
+        <Button onClick={onCreate} variant="contained" disabled={!canCreate}>Create</Button>
       </DialogActions>
     </Dialog>
   )

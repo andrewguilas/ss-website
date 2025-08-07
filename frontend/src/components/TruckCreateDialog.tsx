@@ -20,28 +20,12 @@ export default function RouteCreateDialog({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Create Route</DialogTitle>
       <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          label="Model"
-          fullWidth
-          value={newModel}
-          onChange={e => setNewModel(e.target.value)}
-        />
-        <TextField
-          margin="dense"
-          label="Comments"
-          multiline
-          fullWidth
-          value={newComments}
-          onChange={e => setNewComments(e.target.value)}
-        />
+        <TextField autoFocus margin="dense" label="Model" fullWidth value={newModel} onChange={e => setNewModel(e.target.value)} />
+        <TextField margin="dense" label="Comments" multiline fullWidth value={newComments} onChange={e => setNewComments(e.target.value)} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onCreate} variant="contained">
-          Create
-        </Button>
+        <Button onClick={onCreate} variant="contained">Create</Button>
       </DialogActions>
     </Dialog>
   )
