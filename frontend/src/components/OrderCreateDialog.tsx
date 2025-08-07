@@ -23,6 +23,8 @@ interface OrderCreateDialogProps {
   newItemCount: number | null; setNewItemCount: (id: number | null) => void; 
   newItems: string; setNewItems: (v: string) => void
   newRouteId: number | null; setNewRouteId: (id: number | null) => void; 
+  newOrderInRoute: number | null; setNewOrderInRoute: (id: number | null) => void; 
+
   routes?: Route[]
   mode?: "create" | "edit"
 }
@@ -48,6 +50,8 @@ export default function OrderCreateDialog({
   newItemCount, setNewItemCount,
   newItems, setNewItems,
   newRouteId, setNewRouteId,
+  newOrderInRoute, setNewOrderInRoute,
+
   routes = [],
   mode = "create",
 }: OrderCreateDialogProps) {
@@ -86,6 +90,7 @@ export default function OrderCreateDialog({
             </MenuItem>
           ))}
         </TextField>
+        <TextField margin="dense" label="Order In Route" type="number" fullWidth value={newOrderInRoute ?? ""} onChange={e => setNewOrderInRoute(e.target.value ? Number(e.target.value) : null)} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>

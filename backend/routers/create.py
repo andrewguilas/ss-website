@@ -12,7 +12,7 @@ from backend.schemas.order import OrderCreate, OrderRead
 router = APIRouter()
 
 @router.post("/trucks", response_model=TruckRead)
-def create_truck_route(truck: TruckCreate, db: Session = Depends(get_db)):
+def create_truck_api(truck: TruckCreate, db: Session = Depends(get_db)):
     try:
         new_truck = create_truck(db, truck.model_dump(exclude_unset=True))
         return new_truck
