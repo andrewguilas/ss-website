@@ -43,7 +43,7 @@
 - [x] Row editing
 - [x] Row creation
 - [x] Row selection with checkboxes
-- [ ] Make RouteId & TruckId field a selectable in "Create Order" & "Create Route" page respectively.
+- [x] Make RouteId & TruckId field a selectable in "Create Order" & "Create Route" page respectively.
 - [x] Resize columns automatically. Text wrap if necessary
 - [x] Action button to edit item in a dialog
 - [x] Alerts
