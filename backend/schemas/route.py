@@ -8,10 +8,13 @@ class RouteCreate(BaseModel):
     comments: Optional[str] = None
     truck_id: Optional[int] = None
 
-class RouteRead(RouteCreate):
+class RouteUpdate(BaseModel):
     id: int
-    truck_id: int
+    driver_name: Optional[str] = None
+    comments: Optional[str] = None
+    truck_id: Optional[int] = None
 
+class RouteRead(RouteCreate):
     class ConfigDict:
         from_attributes = True
         

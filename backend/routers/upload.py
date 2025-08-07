@@ -55,7 +55,6 @@ async def upload_orders(file: UploadFile = File(...), db: Session = Depends(get_
                     "dropoff_proxy_name": row.get("DropoffPersonName"),
                     "dropoff_proxy_phone": row.get("DropoffPersonPhone"),
                     "item_count": item_count,
-                    "items": "",
                 })
 
                 logger.debug(f"Inserted order {order.id} of student {order.name}")
