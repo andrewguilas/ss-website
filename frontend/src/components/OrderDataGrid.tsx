@@ -12,35 +12,47 @@ interface OrderDataGridProps {
   onEditRow: (params: any) => Promise<void>
   onDelete: (id: number) => void
   setSnackbar: (snackbar: { open: boolean; message: string; severity: "success" | "error" }) => void
-  onEditDialog: (order: Order) => void // <-- Add this prop
+  onEditDialog: (order: Order) => void
+}
+
+function renderWrappedCell(params: any) {
+  return (
+    <div
+      style={{
+        whiteSpace: "pre-wrap",
+        wordBreak: "break-word",
+        lineHeight: 1.4,
+        minHeight: 40,
+        paddingTop: 4,
+        paddingBottom: 4,
+      }}
+    >
+      {params.value}
+    </div>
+  )
 }
 
 export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar, onEditDialog }: OrderDataGridProps) {
   const navigate = useNavigate()
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 90 },
-    // { field: "campus", headerName: "Campus", editable: true},
-    { field: "name", headerName: "Name", editable: true},
-    { field: "phone", headerName: "Phone", editable: true},
-    { field: "pronunciation", headerName: "Pronunciation", editable: true},
-    { field: "comments", headerName: "Comments", editable: true},
-    { field: "pickup_date", headerName: "Pickup Date", editable: true},
-    { field: "pickup_location", headerName: "Pickup Location", editable: true},
-    // { field: "pickup_proxy_name", headerName: "Pickup Proxy Name", editable: true},
-    // { field: "pickup_proxy_phone", headerName: "Pickup Proxy Phone", editable: true},
-    { field: "dropoff_date", headerName: "Dropoff Date", editable: true},
-    { field: "dropoff_location", headerName: "Dropoff Location", editable: true},
-    // { field: "dropoff_proxy_name", headerName: "Dropoff Proxy Name", editable: true},
-    // { field: "dropoff_proxy_phone", headerName: "Dropoff Proxy Phone", editable: true},
-    { field: "item_count", headerName: "Item Count", editable: true},
-    { field: "items", headerName: "Items", editable: true},
-    { field: "route_id", headerName: "Route ID", editable: true},
-
+    { field: "id", headerName: "ID", minWidth: 60, flex: 0 },
+    { field: "name", headerName: "Name", minWidth: 180, flex: 1, editable: true },
+    { field: "phone", headerName: "Phone", minWidth: 120, flex: 1, editable: true },
+    { field: "pronunciation", headerName: "Pronunciation", minWidth: 180, flex: 1, editable: true },
+    { field: "comments", headerName: "Comments", minWidth: 180, flex: 2, editable: true, renderCell: renderWrappedCell, cellClassName: "wrap-cell"},
+    { field: "pickup_date", headerName: "Pickup Date", minWidth: 120, flex: 1, editable: true },
+    { field: "pickup_location", headerName: "Pickup Location", minWidth: 180, flex: 1, editable: true },
+    { field: "dropoff_date", headerName: "Dropoff Date", minWidth: 120, flex: 1, editable: true },
+    { field: "dropoff_location", headerName: "Dropoff Location", minWidth: 180, flex: 1, editable: true },
+    { field: "item_count", headerName: "Item Count", minWidth: 60, flex: 0, editable: true, type: "number"},
+    { field: "items", headerName: "Items", minWidth: 180, flex: 2, editable: true, renderCell: renderWrappedCell, cellClassName: "wrap-cell"},
+    { field: "route_id", headerName: "Route ID", minWidth: 60, flex: 0, editable: true, type: "number" },
     {
       field: "actions",
       headerName: "Actions",
-      width: 180,
+      minWidth: 180,
+      flex: 0,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
@@ -69,20 +81,38 @@ export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar
   ]
 
   return (
-    <DataGrid
-      rows={orders}
-      columns={columns}
-      checkboxSelection
-      disableRowSelectionOnClick
-      editMode="row"
-      processRowUpdate={async (newRow) => {
-        await onEditRow(newRow)
-        return newRow
-      }}
-      onProcessRowUpdateError={(err) =>
-        setSnackbar({ open: true, message: `Edit failed: ${err}`, severity: "error" })
-      }
-      showToolbar
-    />
+    <div style={{ width: "100%" }}>
+      <style>
+        {`
+          .wrap-cell {
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            line-height: 1.4;
+            align-items: flex-start !important;
+            display: flex;
+            min-height: 40px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+          }
+        `}
+      </style>
+      <DataGrid
+        rows={orders}
+        columns={columns}
+        autoHeight
+        checkboxSelection
+        disableRowSelectionOnClick
+        editMode="row"
+        processRowUpdate={async (newRow) => {
+          await onEditRow(newRow)
+          return newRow
+        }}
+        onProcessRowUpdateError={(err) =>
+          setSnackbar({ open: true, message: `Edit failed: ${err}`, severity: "error" })
+        }
+        showToolbar
+        getRowHeight={() => "auto"}
+      />
+    </div>
   )
 }
