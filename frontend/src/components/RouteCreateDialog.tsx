@@ -1,4 +1,5 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from "@mui/material"
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, MenuItem } from "@mui/material"
+import type { Truck } from "../schemas"
 
 interface RouteCreateDialogProps {
   open: boolean
@@ -9,8 +10,10 @@ interface RouteCreateDialogProps {
   newDriverName: string; setNewDriverName: (v: string) => void
   newComments: string; setNewComments: (v: string) => void
   newTruckId: number | null; setNewTruckId: (id: number | null) => void
+  trucks?: Truck[] // <-- Add this prop
   mode?: "create" | "edit"
 }
+
 export default function RouteCreateDialog({
   open,
   onClose,
@@ -19,6 +22,7 @@ export default function RouteCreateDialog({
   newDriverName, setNewDriverName,
   newComments, setNewComments,
   newTruckId, setNewTruckId,
+  trucks = [],
   mode = "create",
 }: RouteCreateDialogProps) {
   return (
@@ -28,7 +32,21 @@ export default function RouteCreateDialog({
         <TextField autoFocus margin="dense" label="Date" type="date" required disabled={mode === "edit"} fullWidth value={newDate} onChange={e => setNewDate(e.target.value)} slotProps={{ inputLabel: { shrink: true } }} />
         <TextField margin="dense" label="Driver Name" fullWidth value={newDriverName} onChange={e => setNewDriverName(e.target.value)} />
         <TextField margin="dense" label="Comments" multiline fullWidth value={newComments} onChange={e => setNewComments(e.target.value)} />
-        <TextField margin="dense" label="Truck ID" type="number" fullWidth value={newTruckId ?? ""} onChange={e => setNewTruckId(e.target.value ? Number(e.target.value) : null)} />
+        <TextField
+          margin="dense"
+          label="Truck"
+          select
+          fullWidth
+          value={newTruckId ?? ""}
+          onChange={e => setNewTruckId(e.target.value ? Number(e.target.value) : null)}
+        >
+          <MenuItem value="">None</MenuItem>
+          {trucks.map(truck => (
+            <MenuItem key={truck.id} value={truck.id}>
+              {truck.model ? `Truck ${truck.id} - ${truck.model}` : `Truck ${truck.id}`}
+            </MenuItem>
+          ))}
+        </TextField>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>

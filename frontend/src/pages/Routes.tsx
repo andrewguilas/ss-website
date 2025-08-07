@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Box, CircularProgress, Alert, Button, Snackbar } from "@mui/material"
 import RouteDataGrid from "../components/RouteDataGrid"
 import RouteCreateDialog from "../components/RouteCreateDialog"
-import type { Route } from "../schemas"
+import type { Route, Truck } from "../schemas"
 
 export default function Routes() {
   const [routes, setRoutes] = useState<Route[]>([])
@@ -22,6 +22,7 @@ export default function Routes() {
   const [newTruckId, setNewTruckId] = useState<number | null>(null)
 
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
+  const [trucks, setTrucks] = useState<Truck[]>([])
 
   useEffect(() => {
     fetch("http://localhost:8000/routes")
@@ -32,6 +33,14 @@ export default function Routes() {
         console.log(`Failed to fetch route: ${err}`)
       })
       .finally(() => setLoading(false))
+
+    // Fetch trucks for the select field
+    fetch("http://localhost:8000/trucks")
+      .then(res => res.json())
+      .then(data => setTrucks(data))
+      .catch(err => {
+        // Optionally handle truck fetch error
+      })
   }, [])
 
   const handleEditRow = async (params: any) => {
@@ -168,6 +177,7 @@ export default function Routes() {
         newDriverName={newDriverName} setNewDriverName={setNewDriverName}
         newComments={newComments} setNewComments={setNewComments}
         newTruckId={newTruckId} setNewTruckId={setNewTruckId}
+        trucks={trucks} // <-- Pass trucks here
         mode="create" // <-- add this line
       />
 
@@ -180,6 +190,7 @@ export default function Routes() {
         newDriverName={editDriverName} setNewDriverName={setEditDriverName}
         newComments={editComments} setNewComments={setEditComments}
         newTruckId={editTruckId} setNewTruckId={setEditTruckId}
+        trucks={trucks} // <-- Pass trucks here
         mode="edit" // <-- add this line
       />
 

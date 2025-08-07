@@ -4,26 +4,6 @@ export interface Truck {
   comments: string | null
 }
 
-{/*
-  id    Id
-  campus    Campus
-  name    Name
-  phone   Phone
-  pronunciation   Pronunciation
-  comments    Comments
-  pickup_date   PickupDate
-  pickup_location   PickupLocation
-  pickup_proxy_name   PickupProxyName
-  pickup_proxy_phone    PickupProxyPhone
-  dropoff_date    DropoffDate
-  dropoff_location    DropoffLocation
-  dropoff_proxy_name    DropoffProxyName
-  dropoff_proxy_phone   DropoffProxyPhone
-  item_count    ItemCount
-  items   Items
-  route_id    RouteId
-*/}
-
 export interface Route {
   id: number
   date: string
