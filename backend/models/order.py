@@ -28,6 +28,7 @@ class Order(Base):
 
     route_id = Column(Integer, ForeignKey("routes.id"), index=True)
     route = relationship("Route", back_populates="orders")
+    order_in_route = Column(Integer, nullable=True)
 
     def __repr__(self):
         return f"Order(id={self.id}, campus='{self.campus}', name='{self.name}', phone='{self.phone}', pronunciation='{self.pronunciation}', comments='{self.comments}', pickup_date='{self.pickup_date}', pickup_location='{self.pickup_location}', pickup_proxy_name='{self.pickup_proxy_name}', pickup_proxy_phone='{self.pickup_proxy_phone}', dropoff_date='{self.dropoff_date}', dropoff_location='{self.dropoff_location}', dropoff_proxy_name='{self.dropoff_proxy_name}', dropoff_proxy_phone='{self.dropoff_proxy_phone}', item_count={self.item_count}, items='{self.items}', route_id={self.route_id})"
