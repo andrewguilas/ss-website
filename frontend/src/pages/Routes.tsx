@@ -9,12 +9,18 @@ export default function Routes() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
-  
+  const [editOpen, setEditOpen] = useState(false)
+  const [editRoute, setEditRoute] = useState<Route | null>(null)
+  const [editDate, setEditDate] = useState("")
+  const [editDriverName, setEditDriverName] = useState("")
+  const [editComments, setEditComments] = useState("")
+  const [editTruckId, setEditTruckId] = useState<number | null>(null)
+
   const [newDate, setNewDate] = useState("")
   const [newDriverName, setNewDriverName] = useState("")
   const [newComments, setNewComments] = useState("")
   const [newTruckId, setNewTruckId] = useState<number | null>(null)
-  
+
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
 
   useEffect(() => {
@@ -97,6 +103,42 @@ export default function Routes() {
     }
   }
 
+  // --- Add these for edit dialog ---
+  const openEditDialog = (route: Route) => {
+    setEditRoute(route)
+    setEditDate(route.date || "")
+    setEditDriverName(route.driver_name || "")
+    setEditComments(route.comments || "")
+    setEditTruckId(route.truck_id ?? null)
+    setEditOpen(true)
+  }
+
+  const handleEditDialogSave = async () => {
+    if (!editRoute) return
+    try {
+      const res = await fetch(`http://localhost:8000/routes`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: editRoute.id,
+          date: editDate,
+          driver_name: editDriverName,
+          comments: editComments,
+          truck_id: editTruckId,
+        }),
+      })
+      if (!res.ok) throw new Error("Failed to update route")
+      const updated = await res.json()
+      setRoutes(routes => routes.map(t => (t.id === editRoute.id ? updated : t)))
+      setSnackbar({ open: true, message: "Route updated!", severity: "success" })
+      setEditOpen(false)
+      setEditRoute(null)
+    } catch (err) {
+      setSnackbar({ open: true, message: "Update failed", severity: "error" })
+    }
+  }
+  // --- end edit dialog logic ---
+
   return (
     <Box sx={{ height: 600, width: "100%" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
@@ -114,6 +156,7 @@ export default function Routes() {
           onEditRow={handleEditRow}
           onDelete={handleDelete}
           setSnackbar={setSnackbar}
+          onEditDialog={openEditDialog} // <-- pass this prop
         />
       )}
 
@@ -121,11 +164,23 @@ export default function Routes() {
         open={createOpen}
         onClose={() => setCreateOpen(false)}
         onCreate={handleCreate}
-        
         newDate={newDate} setNewDate={setNewDate}
         newDriverName={newDriverName} setNewDriverName={setNewDriverName}
         newComments={newComments} setNewComments={setNewComments}
         newTruckId={newTruckId} setNewTruckId={setNewTruckId}
+        mode="create" // <-- add this line
+      />
+
+      {/* Edit Dialog */}
+      <RouteCreateDialog
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        onCreate={handleEditDialogSave}
+        newDate={editDate} setNewDate={setEditDate}
+        newDriverName={editDriverName} setNewDriverName={setEditDriverName}
+        newComments={editComments} setNewComments={setEditComments}
+        newTruckId={editTruckId} setNewTruckId={setEditTruckId}
+        mode="edit" // <-- add this line
       />
 
       <Snackbar

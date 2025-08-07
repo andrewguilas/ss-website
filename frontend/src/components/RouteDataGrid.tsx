@@ -1,9 +1,8 @@
 import { DataGrid } from "@mui/x-data-grid"
 import { Box, IconButton } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
-import OpenInNewIcon from "@mui/icons-material/OpenInNew"
+import EditIcon from "@mui/icons-material/Edit"
 import type { GridColDef } from "@mui/x-data-grid"
-import { useNavigate } from "react-router-dom"
 import type { Route } from "../schemas"
 
 interface RouteDataGridProps {
@@ -11,21 +10,20 @@ interface RouteDataGridProps {
   onEditRow: (params: any) => Promise<void>
   onDelete: (id: number) => void
   setSnackbar: (snackbar: { open: boolean; message: string; severity: "success" | "error" }) => void
+  onEditDialog: (route: Route) => void // <-- Add this prop
 }
 
-export default function RouteDataGrid({ routes, onEditRow, onDelete, setSnackbar }: RouteDataGridProps) {
-  const navigate = useNavigate()
-
+export default function RouteDataGrid({ routes, onEditRow, onDelete, setSnackbar, onEditDialog }: RouteDataGridProps) {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90 },
-    { field: "date", headerName: "Date", flex: 1 },
-    { field: "driver_name", headerName: "DriverName", flex: 1, editable: true },
+    { field: "date", headerName: "Date", flex: 1},
+    { field: "driver_name", headerName: "Driver Name", flex: 1, editable: true },
     { field: "comments", headerName: "Comments", flex: 2, editable: true },
-    { field: "truck_id", headerName: "TruckId", flex: 1, editable: true },
+    { field: "truck_id", headerName: "Truck ID", flex: 1, editable: true },
     {
       field: "actions",
       headerName: "Actions",
-      width: 140,
+      width: 180,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
@@ -33,9 +31,9 @@ export default function RouteDataGrid({ routes, onEditRow, onDelete, setSnackbar
           <IconButton
             color="primary"
             size="small"
-            onClick={() => navigate(`/routes/${params.row.id}`)}
-            title="Open"
-          ><OpenInNewIcon /></IconButton>
+            onClick={() => onEditDialog(params.row)}
+            title="Edit"
+          ><EditIcon /></IconButton>
           <IconButton
             color="error"
             size="small"
