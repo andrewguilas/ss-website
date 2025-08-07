@@ -9,9 +9,13 @@ export default function Trucks() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
   
   const [newModel, setNewModel] = useState("")
   const [newComments, setNewComments] = useState("")
+  const [editTruck, setEditTruck] = useState<Truck | null>(null)
+  const [editModel, setEditModel] = useState("")
+  const [editComments, setEditComments] = useState("")
 
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
 
@@ -90,6 +94,32 @@ export default function Trucks() {
     }
   }
 
+  const openEditDialog = (truck: Truck) => {
+    setEditTruck(truck)
+    setEditModel(truck.model || "")
+    setEditComments(truck.comments || "")
+    setEditOpen(true)
+  }
+
+  const handleEditDialogSave = async () => {
+    if (!editTruck) return
+    try {
+      const res = await fetch(`http://localhost:8000/trucks`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: editTruck.id, model: editModel, comments: editComments }),
+      })
+      if (!res.ok) throw new Error("Failed to update truck")
+      const updated = await res.json()
+      setTrucks(trucks => trucks.map(t => (t.id === editTruck.id ? updated : t)))
+      setSnackbar({ open: true, message: "Truck updated!", severity: "success" })
+      setEditOpen(false)
+      setEditTruck(null)
+    } catch (err) {
+      setSnackbar({ open: true, message: "Update failed", severity: "error" })
+    }
+  }
+
   return (
     <Box sx={{ height: 600, width: "100%" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
@@ -107,6 +137,7 @@ export default function Trucks() {
           onEditRow={handleEditRow}
           onDelete={handleDelete}
           setSnackbar={setSnackbar}
+          onEditDialog={openEditDialog}
         />
       )}
 
@@ -114,9 +145,18 @@ export default function Trucks() {
         open={createOpen}
         onClose={() => setCreateOpen(false)}
         onCreate={handleCreate}
-        
         newModel={newModel} setNewModel={setNewModel}
         newComments={newComments} setNewComments={setNewComments}
+        mode="create"
+      />
+
+      <TruckCreateDialog
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        onCreate={handleEditDialogSave}
+        newModel={editModel} setNewModel={setEditModel}
+        newComments={editComments} setNewComments={setEditComments}
+        mode="edit"
       />
 
       <Snackbar

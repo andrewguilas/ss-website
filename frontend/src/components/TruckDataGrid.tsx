@@ -1,6 +1,7 @@
 import { DataGrid } from "@mui/x-data-grid"
 import { Box, IconButton } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
+import EditIcon from "@mui/icons-material/Edit"
 import type { GridColDef } from "@mui/x-data-grid"
 import type { Truck } from "../schemas"
 
@@ -9,9 +10,10 @@ interface TruckDataGridProps {
   onEditRow: (params: any) => Promise<void>
   onDelete: (id: number) => void
   setSnackbar: (snackbar: { open: boolean; message: string; severity: "success" | "error" }) => void
+  onEditDialog: (truck: Truck) => void // <-- Add this prop
 }
 
-export default function TruckDataGrid({ trucks, onEditRow, onDelete, setSnackbar }: TruckDataGridProps) {
+export default function TruckDataGrid({ trucks, onEditRow, onDelete, setSnackbar, onEditDialog }: TruckDataGridProps) {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90 },
     { field: "model", headerName: "Model", flex: 1, editable: true },
@@ -19,11 +21,17 @@ export default function TruckDataGrid({ trucks, onEditRow, onDelete, setSnackbar
     {
       field: "actions",
       headerName: "Actions",
-      width: 140,
+      width: 180,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
         <Box>
+          <IconButton
+            color="primary"
+            size="small"
+            onClick={() => onEditDialog(params.row)}
+            title="Edit"
+          ><EditIcon /></IconButton>
           <IconButton
             color="error"
             size="small"
