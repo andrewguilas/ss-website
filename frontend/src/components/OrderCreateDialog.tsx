@@ -6,56 +6,23 @@ interface OrderCreateDialogProps {
   onCreate: () => void
   canCreate?: boolean // <-- add prop
 
-  newId: number | null;
-  setNewId: (id: number | null) => void; 
-
-  newCampus: string
-  setNewCampus: (v: string) => void
-
-  newName: string
-  setNewName: (v: string) => void
-
-  newPhone: string
-  setNewPhone: (v: string) => void
-
-  newPronunciation: string
-  setNewPronunciation: (v: string) => void
-
-  newComments: string
-  setNewComments: (v: string) => void
-
-  newPickupDate: string
-  setNewPickupDate: (v: string) => void
-
-  newPickupLocation: string
-  setNewPickupLocation: (v: string) => void
-
-  newPickupProxyName: string
-  setNewPickupProxyName: (v: string) => void
-
-  newPickupProxyPhone: string
-  setNewPickupProxyPhone: (v: string) => void
-
-  newDropoffDate: string
-  setNewDropoffDate: (v: string) => void
-
-  newDropoffLocation: string
-  setNewDropoffLocation: (v: string) => void
-
-  newDropoffProxyName: string
-  setNewDropoffProxyName: (v: string) => void
-
-  newDropoffProxyPhone: string
-  setNewDropoffProxyPhone: (v: string) => void
-
-  newItemCount: number | null;
-  setNewItemCount: (id: number | null) => void; 
-
-  newItems: string
-  setNewItems: (v: string) => void
-
-  newRouteId: number | null;
-  setNewRouteId: (id: number | null) => void; 
+  newId: number | null; setNewId: (id: number | null) => void; 
+  newCampus: string; setNewCampus: (v: string) => void
+  newName: string; setNewName: (v: string) => void
+  newPhone: string; setNewPhone: (v: string) => void
+  newPronunciation: string; setNewPronunciation: (v: string) => void
+  newComments: string; setNewComments: (v: string) => void
+  newPickupDate: string; setNewPickupDate: (v: string) => void
+  newPickupLocation: string; setNewPickupLocation: (v: string) => void
+  newPickupProxyName: string; setNewPickupProxyName: (v: string) => void
+  newPickupProxyPhone: string; setNewPickupProxyPhone: (v: string) => void
+  newDropoffDate: string; setNewDropoffDate: (v: string) => void
+  newDropoffLocation: string; setNewDropoffLocation: (v: string) => void
+  newDropoffProxyName: string; setNewDropoffProxyName: (v: string) => void
+  newDropoffProxyPhone: string; setNewDropoffProxyPhone: (v: string) => void
+  newItemCount: number | null; setNewItemCount: (id: number | null) => void; 
+  newItems: string; setNewItems: (v: string) => void
+  newRouteId: number | null; setNewRouteId: (id: number | null) => void; 
 }
 
 export default function OrderCreateDialog({
@@ -63,59 +30,23 @@ export default function OrderCreateDialog({
   onClose,
   onCreate,
   canCreate = true, // <-- default true for backward compatibility
-
-  newId,
-  setNewId,
-
-  newCampus,
-  setNewCampus,
-
-  newName,
-  setNewName,
-
-  newPhone,
-  setNewPhone,
-
-  newPronunciation,
-  setNewPronunciation,
-
-  newComments,
-  setNewComments,
-
-  newPickupDate,
-  setNewPickupDate,
-
-  newPickupLocation,
-  setNewPickupLocation,
-
-  newPickupProxyName,
-  setNewPickupProxyName,
-
-  newPickupProxyPhone,
-  setNewPickupProxyPhone,
-
-  newDropoffDate,
-  setNewDropoffDate,
-
-  newDropoffLocation,
-  setNewDropoffLocation,
-
-  newDropoffProxyName,
-  setNewDropoffProxyName,
-
-  newDropoffProxyPhone,
-  setNewDropoffProxyPhone,
-
-  newItemCount,
-  setNewItemCount,
-
-  newItems,
-  setNewItems,
-
-  newRouteId,
-  setNewRouteId,
-
-
+  newId, setNewId,
+  newCampus, setNewCampus,
+  newName, setNewName,
+  newPhone, setNewPhone,
+  newPronunciation, setNewPronunciation,
+  newComments, setNewComments,
+  newPickupDate, setNewPickupDate,
+  newPickupLocation, setNewPickupLocation,
+  newPickupProxyName, setNewPickupProxyName,
+  newPickupProxyPhone, setNewPickupProxyPhone,
+  newDropoffDate, setNewDropoffDate,
+  newDropoffLocation, setNewDropoffLocation,
+  newDropoffProxyName, setNewDropoffProxyName,
+  newDropoffProxyPhone, setNewDropoffProxyPhone,
+  newItemCount, setNewItemCount,
+  newItems, setNewItems,
+  newRouteId, setNewRouteId,
 }: OrderCreateDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>
@@ -174,7 +105,7 @@ export default function OrderCreateDialog({
         
         <TextField
           margin="dense"
-          label="PickupDate"
+          label="Pickup Date"
           type="date"
           fullWidth
           value={newPickupDate}
@@ -184,7 +115,7 @@ export default function OrderCreateDialog({
 
         <TextField
           margin="dense"
-          label="PickupLocation"
+          label="Pickup Location"
           fullWidth
           value={newPickupLocation}
           onChange={e => setNewPickupLocation(e.target.value)}
@@ -192,7 +123,7 @@ export default function OrderCreateDialog({
         
         <TextField
           margin="dense"
-          label="PickupProxyName"
+          label="Pickup Proxy Name"
           fullWidth
           value={newPickupProxyName}
           onChange={e => setNewPickupProxyName(e.target.value)}
@@ -200,7 +131,7 @@ export default function OrderCreateDialog({
         
         <TextField
           margin="dense"
-          label="PickupProxyPhone"
+          label="Pickup Proxy Phone"
           fullWidth
           value={newPickupProxyPhone}
           onChange={e => setNewPickupProxyPhone(e.target.value)}
@@ -208,7 +139,7 @@ export default function OrderCreateDialog({
         
         <TextField
           margin="dense"
-          label="DropoffDate"
+          label="Dropoff Date"
           type="date"
           fullWidth
           value={newDropoffDate}
@@ -218,7 +149,7 @@ export default function OrderCreateDialog({
         
         <TextField
           margin="dense"
-          label="DropoffLocation"
+          label="Dropoff Location"
           fullWidth
           value={newDropoffLocation}
           onChange={e => setNewDropoffLocation(e.target.value)}
@@ -226,7 +157,7 @@ export default function OrderCreateDialog({
         
         <TextField
           margin="dense"
-          label="DropoffProxyName"
+          label="Dropoff Proxy Name"
           fullWidth
           value={newDropoffProxyName}
           onChange={e => setNewDropoffProxyName(e.target.value)}
@@ -234,7 +165,7 @@ export default function OrderCreateDialog({
         
         <TextField
           margin="dense"
-          label="DropoffProxyPhone"
+          label="Dropoff Proxy Phone"
           fullWidth
           value={newDropoffProxyPhone}
           onChange={e => setNewDropoffProxyPhone(e.target.value)}
@@ -242,7 +173,7 @@ export default function OrderCreateDialog({
         
         <TextField
           margin="dense"
-          label="ItemCount"
+          label="Item Count"
           type="number"
           fullWidth
           value={newItemCount ?? ""}
@@ -259,7 +190,7 @@ export default function OrderCreateDialog({
 
         <TextField
           margin="dense"
-          label="RouteId"
+          label="Route ID"
           type="number"
           fullWidth
           value={newRouteId ?? ""}

@@ -5,21 +5,16 @@ interface RouteCreateDialogProps {
   onClose: () => void
   onCreate: () => void
 
-  newModel: string
-  setNewModel: (v: string) => void
-
-  newComments: string
-  setNewComments: (v: string) => void
+  newModel: string; setNewModel: (v: string) => void
+  newComments: string; setNewComments: (v: string) => void
 }
 
 export default function RouteCreateDialog({
   open,
   onClose,
   onCreate,
-  newModel,
-  setNewModel,
-  newComments,
-  setNewComments,
+  newModel, setNewModel,
+  newComments, setNewComments,
 }: RouteCreateDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>

@@ -5,19 +5,11 @@ interface RouteCreateDialogProps {
   onClose: () => void
   onCreate: () => void
 
-  newDate: string
-  setNewDate: (v: string) => void
-  
-  newDriverName: string
-  setNewDriverName: (v: string) => void
-  
-  newComments: string
-  setNewComments: (v: string) => void
-  
-  newTruckId: number | null;
-  setNewTruckId: (id: number | null) => void; 
+  newDate: string; setNewDate: (v: string) => void
+  newDriverName: string; setNewDriverName: (v: string) => void
+  newComments: string; setNewComments: (v: string) => void
+  newTruckId: number | null; setNewTruckId: (id: number | null) => void; 
 }
-
 export default function RouteCreateDialog({
   open,
   onClose,
