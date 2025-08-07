@@ -43,7 +43,7 @@ export default function RouteCreateDialog({
           <MenuItem value="">None</MenuItem>
           {trucks.map(truck => (
             <MenuItem key={truck.id} value={truck.id}>
-              {truck.model ? `Truck ${truck.id} - ${truck.model}` : `Truck ${truck.id}`}
+              {`Truck ${truck.id} - Model ${truck.model || "TBD"}`}
             </MenuItem>
           ))}
         </TextField>

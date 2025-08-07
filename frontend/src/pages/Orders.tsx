@@ -3,10 +3,11 @@ import { Box, CircularProgress, Alert, Button, Snackbar } from "@mui/material"
 import EditIcon from "@mui/icons-material/Edit"
 import OrderDataGrid from "../components/OrderDataGrid"
 import OrderCreateDialog from "../components/OrderCreateDialog"
-import type { Order } from "../schemas"
+import type { Order, Route } from "../schemas"
 
 export default function Orders() {
   const [orders, setOrders] = useState<Order[]>([])
+  const [routes, setRoutes] = useState<Route[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
@@ -60,6 +61,13 @@ export default function Orders() {
         console.log(`Failed to fetch order: ${err}`)
       })
       .finally(() => setLoading(false))
+
+    fetch("http://localhost:8000/routes")
+      .then(res => res.json())
+      .then(data => setRoutes(data))
+      .catch(err => {
+        // Optionally handle route fetch error
+      })
   }, [])
 
   const handleEditRow = async (params: any) => {
@@ -266,6 +274,7 @@ export default function Orders() {
         newItemCount={newItemCount} setNewItemCount={setNewItemCount}
         newItems={newItems} setNewItems={setNewItems}
         newRouteId={newRouteId} setNewRouteId={setNewRouteId}
+        routes={routes}
         mode="create"
       />
 
@@ -292,6 +301,7 @@ export default function Orders() {
         newItemCount={editItemCount} setNewItemCount={setEditItemCount}
         newItems={editItems} setNewItems={setEditItems}
         newRouteId={editRouteId} setNewRouteId={setEditRouteId}
+        routes={routes}
         mode="edit"
       />
 

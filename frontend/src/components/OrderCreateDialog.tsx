@@ -1,4 +1,5 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from "@mui/material"
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, MenuItem } from "@mui/material"
+import type { Route } from "../schemas"
 
 interface OrderCreateDialogProps {
   open: boolean
@@ -22,6 +23,7 @@ interface OrderCreateDialogProps {
   newItemCount: number | null; setNewItemCount: (id: number | null) => void; 
   newItems: string; setNewItems: (v: string) => void
   newRouteId: number | null; setNewRouteId: (id: number | null) => void; 
+  routes?: Route[] // <-- Add this prop
   mode?: "create" | "edit"
 }
 
@@ -46,6 +48,7 @@ export default function OrderCreateDialog({
   newItemCount, setNewItemCount,
   newItems, setNewItems,
   newRouteId, setNewRouteId,
+  routes = [],
   mode = "create",
 }: OrderCreateDialogProps) {
   return (
@@ -68,7 +71,21 @@ export default function OrderCreateDialog({
         <TextField margin="dense" label="Dropoff Proxy Phone" fullWidth value={newDropoffProxyPhone} onChange={e => setNewDropoffProxyPhone(e.target.value)} />
         <TextField margin="dense" label="Item Count" type="number" fullWidth value={newItemCount ?? ""} onChange={e => setNewItemCount(e.target.value ? Number(e.target.value) : null)} />
         <TextField margin="dense" label="Items" fullWidth value={newItems} onChange={e => setNewItems(e.target.value)} />
-        <TextField margin="dense" label="Route ID" type="number" fullWidth value={newRouteId ?? ""} onChange={e => setNewRouteId(e.target.value ? Number(e.target.value) : null)} />
+        <TextField
+          margin="dense"
+          label="Route"
+          select
+          fullWidth
+          value={newRouteId ?? ""}
+          onChange={e => setNewRouteId(e.target.value ? Number(e.target.value) : null)}
+        >
+          <MenuItem value="">None</MenuItem>
+          {routes.map(route => (
+            <MenuItem key={route.id} value={route.id}>
+              {`Route ${route.id} - ${route.date} - Driver ${route.driver_name || "TBD"}`}
+            </MenuItem>
+          ))}
+        </TextField>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
