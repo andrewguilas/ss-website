@@ -2,6 +2,7 @@ import { DataGrid } from "@mui/x-data-grid"
 import { Box, IconButton } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
+import EditIcon from "@mui/icons-material/Edit"
 import type { GridColDef } from "@mui/x-data-grid"
 import { useNavigate } from "react-router-dom"
 import type { Order } from "../schemas"
@@ -11,9 +12,10 @@ interface OrderDataGridProps {
   onEditRow: (params: any) => Promise<void>
   onDelete: (id: number) => void
   setSnackbar: (snackbar: { open: boolean; message: string; severity: "success" | "error" }) => void
+  onEditDialog: (order: Order) => void // <-- Add this prop
 }
 
-export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar }: OrderDataGridProps) {
+export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar, onEditDialog }: OrderDataGridProps) {
   const navigate = useNavigate()
 
   const columns: GridColDef[] = [
@@ -33,12 +35,12 @@ export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar
     // { field: "dropoff_proxy_phone", headerName: "Dropoff Proxy Phone", editable: true},
     { field: "item_count", headerName: "Item Count", editable: true},
     { field: "items", headerName: "Items", editable: true},
-    { field: "route_id", headerName: "RouteId", editable: true},
+    { field: "route_id", headerName: "Route ID", editable: true},
 
     {
       field: "actions",
       headerName: "Actions",
-      width: 140,
+      width: 180,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
@@ -49,6 +51,12 @@ export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar
             onClick={() => navigate(`/orders/${params.row.id}`)}
             title="Open"
           ><OpenInNewIcon /></IconButton>
+          <IconButton
+            color="primary"
+            size="small"
+            onClick={() => onEditDialog(params.row)}
+            title="Edit"
+          ><EditIcon /></IconButton>
           <IconButton
             color="error"
             size="small"

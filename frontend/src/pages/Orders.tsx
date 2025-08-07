@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { Box, CircularProgress, Alert, Button, Snackbar } from "@mui/material"
+import EditIcon from "@mui/icons-material/Edit"
 import OrderDataGrid from "../components/OrderDataGrid"
 import OrderCreateDialog from "../components/OrderCreateDialog"
 import type { Order } from "../schemas"
@@ -9,6 +10,7 @@ export default function Orders() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
   
   const [newId, setNewId] = useState<number | null>(null)
   const [newCampus, setNewCampus] = useState("")
@@ -27,6 +29,25 @@ export default function Orders() {
   const [newItemCount, setNewItemCount] = useState<number | null>(null)
   const [newItems, setNewItems] = useState("")
   const [newRouteId, setNewRouteId] = useState<number | null>(null)
+  
+  const [editOrder, setEditOrder] = useState<Order | null>(null)
+  const [editId, setEditId] = useState<number | null>(null)
+  const [editCampus, setEditCampus] = useState("")
+  const [editName, setEditName] = useState("")
+  const [editPhone, setEditPhone] = useState("")
+  const [editPronunciation, setEditPronunciation] = useState("")
+  const [editComments, setEditComments] = useState("")
+  const [editPickupDate, setEditPickupDate] = useState("")
+  const [editPickupLocation, setEditPickupLocation] = useState("")
+  const [editPickupProxyName, setEditPickupProxyName] = useState("")
+  const [editPickupProxyPhone, setEditPickupProxyPhone] = useState("")
+  const [editDropoffDate, setEditDropoffDate] = useState("")
+  const [editDropoffLocation, setEditDropoffLocation] = useState("")
+  const [editDropoffProxyName, setEditDropoffProxyName] = useState("")
+  const [editDropoffProxyPhone, setEditDropoffProxyPhone] = useState("")
+  const [editItemCount, setEditItemCount] = useState<number | null>(null)
+  const [editItems, setEditItems] = useState("")
+  const [editRouteId, setEditRouteId] = useState<number | null>(null)
   
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
 
@@ -141,6 +162,67 @@ export default function Orders() {
     }
   }
 
+  // --- Edit dialog logic ---
+  const openEditDialog = (order: Order) => {
+    setEditOrder(order)
+    setEditId(order.id ?? null)
+    setEditCampus(order.campus ?? "")
+    setEditName(order.name ?? "")
+    setEditPhone(order.phone ?? "")
+    setEditPronunciation(order.pronunciation ?? "")
+    setEditComments(order.comments ?? "")
+    setEditPickupDate(order.pickup_date ?? "")
+    setEditPickupLocation(order.pickup_location ?? "")
+    setEditPickupProxyName(order.pickup_proxy_name ?? "")
+    setEditPickupProxyPhone(order.pickup_proxy_phone ?? "")
+    setEditDropoffDate(order.dropoff_date ?? "")
+    setEditDropoffLocation(order.dropoff_location ?? "")
+    setEditDropoffProxyName(order.dropoff_proxy_name ?? "")
+    setEditDropoffProxyPhone(order.dropoff_proxy_phone ?? "")
+    setEditItemCount(order.item_count ?? null)
+    setEditItems(order.items ?? "")
+    setEditRouteId(order.route_id ?? null)
+    setEditOpen(true)
+  }
+
+  const handleEditDialogSave = async () => {
+    if (!editOrder) return
+    try {
+      const res = await fetch(`http://localhost:8000/orders`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: editId,
+          campus: editCampus,
+          name: editName,
+          phone: editPhone,
+          pronunciation: editPronunciation,
+          comments: editComments,
+          pickup_date: editPickupDate || null,
+          pickup_location: editPickupLocation,
+          pickup_proxy_name: editPickupProxyName,
+          pickup_proxy_phone: editPickupProxyPhone,
+          dropoff_date: editDropoffDate || null,
+          dropoff_location: editDropoffLocation,
+          dropoff_proxy_name: editDropoffProxyName,
+          dropoff_proxy_phone: editDropoffProxyPhone,
+          item_count: editItemCount,
+          items: editItems,
+          route_id: editRouteId
+        }),
+      })
+      if (!res.ok) throw new Error("Failed to update order")
+      const updated = await res.json()
+      setOrders(orders => orders.map(t => (t.id === editOrder.id ? updated : t)))
+      setSnackbar({ open: true, message: "Order updated!", severity: "success" })
+      setEditOpen(false)
+      setEditOrder(null)
+    } catch (err) {
+      setSnackbar({ open: true, message: "Update failed", severity: "error" })
+    }
+  }
+  // --- end edit dialog logic ---
+
   return (
     <Box sx={{ height: 600, width: "100%" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
@@ -158,6 +240,7 @@ export default function Orders() {
           onEditRow={handleEditRow}
           onDelete={handleDelete}
           setSnackbar={setSnackbar}
+          onEditDialog={openEditDialog} // <-- pass this prop
         />
       )}
 
@@ -183,6 +266,33 @@ export default function Orders() {
         newItemCount={newItemCount} setNewItemCount={setNewItemCount}
         newItems={newItems} setNewItems={setNewItems}
         newRouteId={newRouteId} setNewRouteId={setNewRouteId}
+        mode="create"
+      />
+
+      {/* Edit Dialog */}
+      <OrderCreateDialog
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        onCreate={handleEditDialogSave}
+        
+        newId={editId} setNewId={setEditId}
+        newCampus={editCampus} setNewCampus={setEditCampus}
+        newName={editName} setNewName={setEditName}
+        newPhone={editPhone} setNewPhone={setEditPhone}
+        newPronunciation={editPronunciation} setNewPronunciation={setEditPronunciation}
+        newComments={editComments} setNewComments={setEditComments}
+        newPickupDate={editPickupDate} setNewPickupDate={setEditPickupDate}
+        newPickupLocation={editPickupLocation} setNewPickupLocation={setEditPickupLocation}
+        newPickupProxyName={editPickupProxyName} setNewPickupProxyName={setEditPickupProxyName}
+        newPickupProxyPhone={editPickupProxyPhone} setNewPickupProxyPhone={setEditPickupProxyPhone}
+        newDropoffDate={editDropoffDate} setNewDropoffDate={setEditDropoffDate}
+        newDropoffLocation={editDropoffLocation} setNewDropoffLocation={setEditDropoffLocation}
+        newDropoffProxyName={editDropoffProxyName} setNewDropoffProxyName={setEditDropoffProxyName}
+        newDropoffProxyPhone={editDropoffProxyPhone} setNewDropoffProxyPhone={setEditDropoffProxyPhone}
+        newItemCount={editItemCount} setNewItemCount={setEditItemCount}
+        newItems={editItems} setNewItems={setEditItems}
+        newRouteId={editRouteId} setNewRouteId={setEditRouteId}
+        mode="edit"
       />
 
       <Snackbar

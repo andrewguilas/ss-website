@@ -22,6 +22,7 @@ interface OrderCreateDialogProps {
   newItemCount: number | null; setNewItemCount: (id: number | null) => void; 
   newItems: string; setNewItems: (v: string) => void
   newRouteId: number | null; setNewRouteId: (id: number | null) => void; 
+  mode?: "create" | "edit"
 }
 
 export default function OrderCreateDialog({
@@ -45,12 +46,13 @@ export default function OrderCreateDialog({
   newItemCount, setNewItemCount,
   newItems, setNewItems,
   newRouteId, setNewRouteId,
+  mode = "create",
 }: OrderCreateDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Create Order</DialogTitle>
+      <DialogTitle>{mode === "edit" ? "Edit Order" : "Create Order"}</DialogTitle>
       <DialogContent>
-        <TextField margin="dense" label="Id" type="number" fullWidth value={newId ?? ""} onChange={e => setNewId(e.target.value ? Number(e.target.value) : null)} />
+        <TextField margin="dense" label="ID" type="number" fullWidth value={newId ?? ""} onChange={e => setNewId(e.target.value ? Number(e.target.value) : null)} />
         <TextField autoFocus margin="dense" label="Campus" fullWidth value={newCampus} onChange={e => setNewCampus(e.target.value)} />
         <TextField margin="dense" label="Name" fullWidth value={newName} onChange={e => setNewName(e.target.value)} />
         <TextField margin="dense" label="Phone" fullWidth value={newPhone} onChange={e => setNewPhone(e.target.value)} />
@@ -70,7 +72,7 @@ export default function OrderCreateDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onCreate} variant="contained">Create</Button>
+        <Button onClick={onCreate} variant="contained">{mode === "edit" ? "Save" : "Create"}</Button>
       </DialogActions>
     </Dialog>
   )
