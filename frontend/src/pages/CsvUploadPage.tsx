@@ -14,7 +14,8 @@ import UploadFileIcon from "@mui/icons-material/UploadFile"
 export default function CsvUploadPage() {
   const [file, setFile] = useState<File | null>(null)
   const [clearDB, setClearDB] = useState(false)
-  const [alert, setAlert] = useState<{ type: "success" | "error"; message: string } | null>(null)
+  const [alert, setAlert] = useState<{ type: "success" | "error" | "info"; message: string } | null>(null)
+  const [uploading, setUploading] = useState(false)
 
   const handleUpload = async () => {
     setAlert(null)
@@ -28,13 +29,16 @@ export default function CsvUploadPage() {
         await fetch("http://localhost:8000/clear-database", {
           method: "DELETE",
         })
-        setAlert({ type: "success", message: "Database cleared." })
+        setAlert({ type: "info", message: "Database cleared. Uploading..." })
       } catch (err) {
         setAlert({ type: "error", message: "Failed to clear database." })
         return
       }
+    } else {
+      setAlert({ type: "info", message: "Uploading..." })
     }
 
+    setUploading(true)
     const formData = new FormData()
     formData.append("file", file)
 
@@ -51,6 +55,8 @@ export default function CsvUploadPage() {
       })
     } catch (err) {
       setAlert({ type: "error", message: "Upload failed." })
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -63,7 +69,7 @@ export default function CsvUploadPage() {
           </Typography>
 
           {alert && (
-            <Alert severity={alert.type} onClose={() => setAlert(null)}>
+            <Alert severity={alert.type === "info" ? "info" : alert.type} onClose={() => setAlert(null)}>
               {alert.message}
             </Alert>
           )}
@@ -97,7 +103,7 @@ export default function CsvUploadPage() {
             variant="contained"
             color="primary"
             onClick={handleUpload}
-            disabled={!file}
+            disabled={!file || uploading}
           >
             Upload
           </Button>
