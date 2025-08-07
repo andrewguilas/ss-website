@@ -165,7 +165,8 @@ export default function Routes() {
           onEditRow={handleEditRow}
           onDelete={handleDelete}
           setSnackbar={setSnackbar}
-          onEditDialog={openEditDialog} // <-- pass this prop
+          onEditDialog={openEditDialog}
+          trucks={trucks}
         />
       )}
 
