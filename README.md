@@ -44,8 +44,8 @@
 - [x] Row creation
 - [x] Row selection with checkboxes
 - [ ] Make RouteId & TruckId field a selectable in "Create Order" & "Create Route" page respectively.
-- [ ] Resize columns automatically. Text wrap if necessary
-- [ ] Action button to open item (and more details) in a dialog
+- [x] Resize columns automatically. Text wrap if necessary
+- [x] Action button to edit item in a dialog
 - [x] Alerts
 - [x] Icons for action buttons
 - [ ] Styling
