@@ -36,6 +36,7 @@ export default function RouteCreateDialog({
         <TextField
           margin="dense"
           label="Comments"
+          multiline
           fullWidth
           value={newComments}
           onChange={e => setNewComments(e.target.value)}

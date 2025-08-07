@@ -22,18 +22,10 @@ export default function RouteCreateDialog({
   open,
   onClose,
   onCreate,
-  
-  newDate,
-  setNewDate,
-
-  newDriverName,
-  setNewDriverName,
-
-  newComments,
-  setNewComments,
-
-  newTruckId,
-  setNewTruckId,
+  newDate, setNewDate,
+  newDriverName, setNewDriverName,
+  newComments, setNewComments,
+  newTruckId, setNewTruckId,
 }: RouteCreateDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>
@@ -45,6 +37,7 @@ export default function RouteCreateDialog({
           margin="dense"
           label="Date"
           type="date"
+          required
           fullWidth
           value={newDate}
           onChange={e => setNewDate(e.target.value)}
@@ -53,7 +46,7 @@ export default function RouteCreateDialog({
       
         <TextField
           margin="dense"
-          label="DriverName"
+          label="Driver Name"
           fullWidth
           value={newDriverName}
           onChange={e => setNewDriverName(e.target.value)}
@@ -62,6 +55,7 @@ export default function RouteCreateDialog({
         <TextField
           margin="dense"
           label="Comments"
+          multiline
           fullWidth
           value={newComments}
           onChange={e => setNewComments(e.target.value)}
@@ -69,7 +63,7 @@ export default function RouteCreateDialog({
       
         <TextField
           margin="dense"
-          label="TruckId"
+          label="Truck ID"
           type="number"
           fullWidth
           value={newTruckId ?? ""}

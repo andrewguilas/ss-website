@@ -11,30 +11,24 @@ export default function TruckViewDialog({ open, onClose, truck }: TruckViewDialo
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Truck Info</DialogTitle>
-      <DialogContent>
+      <DialogContent dividers>
         <TextField
           margin="dense"
           label="ID"
           fullWidth
           value={truck?.id ?? ""}
-          InputProps={{ readOnly: true }}
-          variant="filled"
         />
         <TextField
           margin="dense"
           label="Model"
           fullWidth
           value={truck?.model ?? ""}
-          InputProps={{ readOnly: true }}
-          variant="filled"
         />
         <TextField
           margin="dense"
           label="Comments"
           fullWidth
           value={truck?.comments ?? ""}
-          InputProps={{ readOnly: true }}
-          variant="filled"
         />
       </DialogContent>
       <DialogActions>
