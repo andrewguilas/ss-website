@@ -30,9 +30,7 @@ export default function RouteCreateDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onCreate} variant="contained">
-          Create
-        </Button>
+        <Button onClick={onCreate} variant="contained">Create</Button>
       </DialogActions>
     </Dialog>
   )

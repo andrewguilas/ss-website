@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { Box, CircularProgress, Alert, Button, Snackbar } from "@mui/material"
 import TruckDataGrid from "../components/TruckDataGrid"
 import TruckCreateDialog from "../components/TruckCreateDialog"
-import TruckViewDialog from "../components/TruckViewDialog"
 import type { Truck } from "../schemas"
 
 export default function Trucks() {
@@ -10,11 +9,9 @@ export default function Trucks() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
-  const [viewOpen, setViewOpen] = useState(false)
   
   const [newModel, setNewModel] = useState("")
   const [newComments, setNewComments] = useState("")
-  const [selectedTruck, setSelectedTruck] = useState<Truck | null>(null)
 
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
 
@@ -70,23 +67,22 @@ export default function Trucks() {
       })
       if (!res.ok) {
         const err = await res.json()
-        // Format error message
-        let msg = "Failed to create order"
         if (err.detail) {
           if (Array.isArray(err.detail)) {
-            msg = `${msg}: ${err.detail.map((d: any) => d.msg || JSON.stringify(d)).join("; ")}`
+            throw new Error(`"Failed to create truck: ${err.detail.map((d: any) => d.msg || JSON.stringify(d)).join("; ")}`)
           } else if (typeof err.detail === "string") {
-            msg = `${msg}: ${err.detail}`
+            throw new Error(`"Failed to create truck: ${err.detail}`)
           } else if (typeof err.detail === "object") {
-            msg = `${msg}: ${JSON.stringify(err.detail)}`
+            throw new Error(`"Failed to create truck: ${JSON.stringify(err.detail)}`)
           }
         }
-        throw new Error(msg)
+        throw new Error("Failed to create truck")
       }
       const created = await res.json()
       setTrucks(trucks => [...trucks, created])
       setSnackbar({ open: true, message: "Truck created!", severity: "success" })
       setCreateOpen(false)
+      
       setNewModel("")
       setNewComments("")
     } catch (err: any) {
@@ -98,13 +94,7 @@ export default function Trucks() {
     <Box sx={{ height: 600, width: "100%" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <h1 className="text-2xl font-semibold">Trucks</h1>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => setCreateOpen(true)}
-        >
-          Create Truck
-        </Button>
+        <Button variant="contained" color="success" onClick={() => setCreateOpen(true)}>Create Truck</Button>
       </Box>
       {error && <Alert severity="error">{error}</Alert>}
       {loading ? (
@@ -117,10 +107,6 @@ export default function Trucks() {
           onEditRow={handleEditRow}
           onDelete={handleDelete}
           setSnackbar={setSnackbar}
-          onView={(truck) => {
-            setSelectedTruck(truck)
-            setViewOpen(true)
-          }}
         />
       )}
 
@@ -128,16 +114,9 @@ export default function Trucks() {
         open={createOpen}
         onClose={() => setCreateOpen(false)}
         onCreate={handleCreate}
-        newModel={newModel}
-        setNewModel={setNewModel}
-        newComments={newComments}
-        setNewComments={setNewComments}
-      />
-
-      <TruckViewDialog
-        open={viewOpen}
-        onClose={() => setViewOpen(false)}
-        truck={selectedTruck}
+        
+        newModel={newModel} setNewModel={setNewModel}
+        newComments={newComments} setNewComments={setNewComments}
       />
 
       <Snackbar

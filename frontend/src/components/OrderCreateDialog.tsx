@@ -4,7 +4,6 @@ interface OrderCreateDialogProps {
   open: boolean
   onClose: () => void
   onCreate: () => void
-  canCreate?: boolean // <-- add prop
 
   newId: number | null; setNewId: (id: number | null) => void; 
   newCampus: string; setNewCampus: (v: string) => void
@@ -29,7 +28,6 @@ export default function OrderCreateDialog({
   open,
   onClose,
   onCreate,
-  canCreate = true, // <-- default true for backward compatibility
   newId, setNewId,
   newCampus, setNewCampus,
   newName, setNewName,
@@ -72,7 +70,7 @@ export default function OrderCreateDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onCreate} variant="contained" disabled={!canCreate}>Create</Button>
+        <Button onClick={onCreate} variant="contained">Create</Button>
       </DialogActions>
     </Dialog>
   )

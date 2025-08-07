@@ -71,18 +71,16 @@ export default function Routes() {
       })
       if (!res.ok) {
         const err = await res.json()
-        // Format error message
-        let msg = "Failed to create order"
         if (err.detail) {
           if (Array.isArray(err.detail)) {
-            msg = `${msg}: ${err.detail.map((d: any) => d.msg || JSON.stringify(d)).join("; ")}`
+            throw new Error(`"Failed to create route: ${err.detail.map((d: any) => d.msg || JSON.stringify(d)).join("; ")}`)
           } else if (typeof err.detail === "string") {
-            msg = `${msg}: ${err.detail}`
+            throw new Error(`"Failed to create route: ${err.detail}`)
           } else if (typeof err.detail === "object") {
-            msg = `${msg}: ${JSON.stringify(err.detail)}`
+            throw new Error(`"Failed to create route: ${JSON.stringify(err.detail)}`)
           }
         }
-        throw new Error(msg)
+        throw new Error("Failed to create route")
       }
       const created = await res.json()
       setRoutes(routes => [...routes, created])
@@ -93,7 +91,6 @@ export default function Routes() {
       setNewDriverName("")
       setNewComments("")
       setNewTruckId(null)
-
     } catch (err: any) {
       setSnackbar({ open: true, message: err.message || "Create failed", severity: "error" })
       console.log(`Failed to create row: ${err}`)
@@ -104,13 +101,7 @@ export default function Routes() {
     <Box sx={{ height: 600, width: "100%" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <h1 className="text-2xl font-semibold">Routes</h1>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => setCreateOpen(true)}
-        >
-          Create Route
-        </Button>
+        <Button variant="contained" color="success" onClick={() => setCreateOpen(true)}>Create Route</Button>
       </Box>
       {error && <Alert severity="error">{error}</Alert>}
       {loading ? (
@@ -131,17 +122,10 @@ export default function Routes() {
         onClose={() => setCreateOpen(false)}
         onCreate={handleCreate}
         
-        newDate={newDate}
-        setNewDate={setNewDate}
-
-        newDriverName={newDriverName}
-        setNewDriverName={setNewDriverName}
-        
-        newComments={newComments}
-        setNewComments={setNewComments}
-        
-        newTruckId={newTruckId}
-        setNewTruckId={setNewTruckId}
+        newDate={newDate} setNewDate={setNewDate}
+        newDriverName={newDriverName} setNewDriverName={setNewDriverName}
+        newComments={newComments} setNewComments={setNewComments}
+        newTruckId={newTruckId} setNewTruckId={setNewTruckId}
       />
 
       <Snackbar

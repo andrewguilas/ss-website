@@ -35,17 +35,13 @@ export default function RouteDataGrid({ routes, onEditRow, onDelete, setSnackbar
             size="small"
             onClick={() => navigate(`/routes/${params.row.id}`)}
             title="Open"
-          >
-            <OpenInNewIcon />
-          </IconButton>
+          ><OpenInNewIcon /></IconButton>
           <IconButton
             color="error"
             size="small"
             onClick={() => onDelete(params.row.id)}
             title="Delete"
-          >
-            <DeleteIcon />
-          </IconButton>
+          ><DeleteIcon /></IconButton>
         </Box>
       ),
     },

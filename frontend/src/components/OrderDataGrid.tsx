@@ -48,17 +48,13 @@ export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar
             size="small"
             onClick={() => navigate(`/orders/${params.row.id}`)}
             title="Open"
-          >
-            <OpenInNewIcon />
-          </IconButton>
+          ><OpenInNewIcon /></IconButton>
           <IconButton
             color="error"
             size="small"
             onClick={() => onDelete(params.row.id)}
             title="Delete"
-          >
-            <DeleteIcon />
-          </IconButton>
+          ><DeleteIcon /></IconButton>
         </Box>
       ),
     },

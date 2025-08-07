@@ -102,18 +102,16 @@ export default function Orders() {
       })
       if (!res.ok) {
         const err = await res.json()
-        // Format error message
-        let msg = `Failed to create order: `
         if (err.detail) {
           if (Array.isArray(err.detail)) {
-            msg = `${msg}: ${err.detail.map((d: any) => d.msg || JSON.stringify(d)).join("; ")}`
+            throw new Error(`"Failed to create order: ${err.detail.map((d: any) => d.msg || JSON.stringify(d)).join("; ")}`)
           } else if (typeof err.detail === "string") {
-            msg = `${msg}: ${err.detail}`
+            throw new Error(`"Failed to create order: ${err.detail}`)
           } else if (typeof err.detail === "object") {
-            msg = `${msg}: ${JSON.stringify(err.detail)}`
+            throw new Error(`"Failed to create order: ${JSON.stringify(err.detail)}`)
           }
         }
-        throw new Error(msg)
+        throw new Error("Failed to create order")
       }
       const created = await res.json()
       setOrders(orders => [...orders, created])
@@ -143,22 +141,11 @@ export default function Orders() {
     }
   }
 
-  // Add validation for required fields
-  const canCreate =
-    newCampus.trim() !== "" &&
-    newName.trim() !== "";
-
   return (
     <Box sx={{ height: 600, width: "100%" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <h1 className="text-2xl font-semibold">Orders</h1>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => setCreateOpen(true)}
-        >
-          Create Order
-        </Button>
+        <Button variant="contained" color="success" onClick={() => setCreateOpen(true)}>Create Order</Button>
       </Box>
       {error && <Alert severity="error">{error}</Alert>}
       {loading ? (
@@ -178,58 +165,24 @@ export default function Orders() {
         open={createOpen}
         onClose={() => setCreateOpen(false)}
         onCreate={handleCreate}
-        canCreate={canCreate} // <-- pass prop
         
-        newId={newId}
-        setNewId={setNewId}
-
-        newCampus={newCampus}
-        setNewCampus={setNewCampus}
-
-        newName={newName}
-        setNewName={setNewName}
-
-        newPhone={newPhone}
-        setNewPhone={setNewPhone}
-
-        newPronunciation={newPronunciation}
-        setNewPronunciation={setNewPronunciation}
-
-        newComments={newComments}
-        setNewComments={setNewComments}
-
-        newPickupDate={newPickupDate}
-        setNewPickupDate={setNewPickupDate}
-
-        newPickupLocation={newPickupLocation}
-        setNewPickupLocation={setNewPickupLocation}
-
-        newPickupProxyName={newPickupProxyName}
-        setNewPickupProxyName={setNewPickupProxyName}
-
-        newPickupProxyPhone={newPickupProxyPhone}
-        setNewPickupProxyPhone={setNewPickupProxyPhone}
-
-        newDropoffDate={newDropoffDate}
-        setNewDropoffDate={setNewDropoffDate}
-
-        newDropoffLocation={newDropoffLocation}
-        setNewDropoffLocation={setNewDropoffLocation}
-
-        newDropoffProxyName={newDropoffProxyName}
-        setNewDropoffProxyName={setNewDropoffProxyName}
-
-        newDropoffProxyPhone={newDropoffProxyPhone}
-        setNewDropoffProxyPhone={setNewDropoffProxyPhone}
-
-        newItemCount={newItemCount}
-        setNewItemCount={setNewItemCount}
-
-        newItems={newItems}
-        setNewItems={setNewItems}
-
-        newRouteId={newRouteId}
-        setNewRouteId={setNewRouteId}
+        newId={newId} setNewId={setNewId}
+        newCampus={newCampus} setNewCampus={setNewCampus}
+        newName={newName} setNewName={setNewName}
+        newPhone={newPhone} setNewPhone={setNewPhone}
+        newPronunciation={newPronunciation} setNewPronunciation={setNewPronunciation}
+        newComments={newComments} setNewComments={setNewComments}
+        newPickupDate={newPickupDate} setNewPickupDate={setNewPickupDate}
+        newPickupLocation={newPickupLocation} setNewPickupLocation={setNewPickupLocation}
+        newPickupProxyName={newPickupProxyName} setNewPickupProxyName={setNewPickupProxyName}
+        newPickupProxyPhone={newPickupProxyPhone} setNewPickupProxyPhone={setNewPickupProxyPhone}
+        newDropoffDate={newDropoffDate} setNewDropoffDate={setNewDropoffDate}
+        newDropoffLocation={newDropoffLocation} setNewDropoffLocation={setNewDropoffLocation}
+        newDropoffProxyName={newDropoffProxyName} setNewDropoffProxyName={setNewDropoffProxyName}
+        newDropoffProxyPhone={newDropoffProxyPhone} setNewDropoffProxyPhone={setNewDropoffProxyPhone}
+        newItemCount={newItemCount} setNewItemCount={setNewItemCount}
+        newItems={newItems} setNewItems={setNewItems}
+        newRouteId={newRouteId} setNewRouteId={setNewRouteId}
       />
 
       <Snackbar
