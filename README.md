@@ -48,7 +48,7 @@
 - [x] Action button to edit item in a dialog
 - [x] Alerts
 - [x] Icons for action buttons
-- [ ] Styling
+- [x] Styling
 - [ ] Export formatted order list
 
 ### Phase 4 – Order Photos
