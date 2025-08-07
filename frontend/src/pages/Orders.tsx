@@ -248,7 +248,8 @@ export default function Orders() {
           onEditRow={handleEditRow}
           onDelete={handleDelete}
           setSnackbar={setSnackbar}
-          onEditDialog={openEditDialog} // <-- pass this prop
+          onEditDialog={openEditDialog}
+          routes={routes}
         />
       )}
 

@@ -1,11 +1,11 @@
 import { DataGrid } from "@mui/x-data-grid"
-import { Box, IconButton } from "@mui/material"
+import { Box, IconButton, MenuItem, Select } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 import EditIcon from "@mui/icons-material/Edit"
 import type { GridColDef } from "@mui/x-data-grid"
 import { useNavigate } from "react-router-dom"
-import type { Order } from "../schemas"
+import type { Order, Route } from "../schemas"
 
 interface OrderDataGridProps {
   orders: Order[]
@@ -13,6 +13,7 @@ interface OrderDataGridProps {
   onDelete: (id: number) => void
   setSnackbar: (snackbar: { open: boolean; message: string; severity: "success" | "error" }) => void
   onEditDialog: (order: Order) => void
+  routes?: Route[] // <-- Add this prop
 }
 
 function renderWrappedCell(params: any) {
@@ -32,7 +33,7 @@ function renderWrappedCell(params: any) {
   )
 }
 
-export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar, onEditDialog }: OrderDataGridProps) {
+export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar, onEditDialog, routes = [] }: OrderDataGridProps) {
   const navigate = useNavigate()
 
   const columns: GridColDef[] = [
@@ -47,7 +48,33 @@ export default function OrderDataGrid({ orders, onEditRow, onDelete, setSnackbar
     { field: "dropoff_location", headerName: "Dropoff Location", minWidth: 180, flex: 1, editable: true },
     { field: "item_count", headerName: "Item Count", minWidth: 60, flex: 0, editable: true, type: "number"},
     { field: "items", headerName: "Items", minWidth: 180, flex: 2, editable: true, renderCell: renderWrappedCell, cellClassName: "wrap-cell"},
-    { field: "route_id", headerName: "Route ID", minWidth: 60, flex: 0, editable: true, type: "number" },
+    {
+      field: "route_id",
+      headerName: "Route ID",
+      minWidth: 180,
+      flex: 0,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: routes.map(route => ({
+        value: route.id,
+        label: `${route.id} - ${route.date} - Driver ${route.driver_name || "TBD"}`,
+      })),
+      renderEditCell: (params) => (
+        <Select
+          value={params.value ?? ""}
+          onChange={e => params.api.setEditCellValue({ id: params.id, field: params.field, value: e.target.value === "" ? null : Number(e.target.value) })}
+          fullWidth
+          displayEmpty
+        >
+          <MenuItem value="">None</MenuItem>
+          {routes.map(route => (
+            <MenuItem key={route.id} value={route.id}>
+              {`Route ${route.id} - ${route.date}${route.driver_name ? ` - ${route.driver_name}` : ""}`}
+            </MenuItem>
+          ))}
+        </Select>
+      ),
+    },
     {
       field: "actions",
       headerName: "Actions",
