@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Box, CircularProgress, Alert, Button, Snackbar } from "@mui/material"
 import TruckDataGrid from "../components/TruckDataGrid"
 import TruckCreateDialog from "../components/TruckCreateDialog"
+import TruckViewDialog from "../components/TruckViewDialog"
 import type { Truck } from "../schemas"
 
 export default function Trucks() {
@@ -9,9 +10,11 @@ export default function Trucks() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
+  const [viewOpen, setViewOpen] = useState(false)
   
   const [newModel, setNewModel] = useState("")
   const [newComments, setNewComments] = useState("")
+  const [selectedTruck, setSelectedTruck] = useState<Truck | null>(null)
 
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({ open: false, message: "", severity: "success" })
 
@@ -114,6 +117,10 @@ export default function Trucks() {
           onEditRow={handleEditRow}
           onDelete={handleDelete}
           setSnackbar={setSnackbar}
+          onView={(truck) => {
+            setSelectedTruck(truck)
+            setViewOpen(true)
+          }}
         />
       )}
 
@@ -125,6 +132,12 @@ export default function Trucks() {
         setNewModel={setNewModel}
         newComments={newComments}
         setNewComments={setNewComments}
+      />
+
+      <TruckViewDialog
+        open={viewOpen}
+        onClose={() => setViewOpen(false)}
+        truck={selectedTruck}
       />
 
       <Snackbar
