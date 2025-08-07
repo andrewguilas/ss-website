@@ -10,20 +10,38 @@ interface RouteDataGridProps {
   onEditRow: (params: any) => Promise<void>
   onDelete: (id: number) => void
   setSnackbar: (snackbar: { open: boolean; message: string; severity: "success" | "error" }) => void
-  onEditDialog: (route: Route) => void // <-- Add this prop
+  onEditDialog: (route: Route) => void
+}
+
+function renderWrappedCell(params: any) {
+  return (
+    <div
+      style={{
+        whiteSpace: "pre-wrap",
+        wordBreak: "break-word",
+        lineHeight: 1.4,
+        minHeight: 40,
+        paddingTop: 4,
+        paddingBottom: 4,
+      }}
+    >
+      {params.value}
+    </div>
+  )
 }
 
 export default function RouteDataGrid({ routes, onEditRow, onDelete, setSnackbar, onEditDialog }: RouteDataGridProps) {
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 90 },
-    { field: "date", headerName: "Date", flex: 1},
-    { field: "driver_name", headerName: "Driver Name", flex: 1, editable: true },
-    { field: "comments", headerName: "Comments", flex: 2, editable: true },
-    { field: "truck_id", headerName: "Truck ID", flex: 1, editable: true },
+    { field: "id", headerName: "ID", minWidth: 60, flex: 0 },
+    { field: "date", headerName: "Date", minWidth: 120, flex: 1 },
+    { field: "driver_name", headerName: "Driver Name", minWidth: 180, flex: 1, editable: true },
+    { field: "comments", headerName: "Comments", minWidth: 60, flex: 2, editable: true, renderCell: renderWrappedCell, cellClassName: "wrap-cell"},
+    { field: "truck_id", headerName: "Truck ID", minWidth: 80, flex: 1, editable: true },
     {
       field: "actions",
       headerName: "Actions",
-      width: 180,
+      minWidth: 120,
+      flex: 0,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
@@ -46,20 +64,38 @@ export default function RouteDataGrid({ routes, onEditRow, onDelete, setSnackbar
   ]
 
   return (
-    <DataGrid
-      rows={routes}
-      columns={columns}
-      checkboxSelection
-      disableRowSelectionOnClick
-      editMode="row"
-      processRowUpdate={async (newRow) => {
-        await onEditRow(newRow)
-        return newRow
-      }}
-      onProcessRowUpdateError={(err) =>
-        setSnackbar({ open: true, message: `Edit failed: ${err}`, severity: "error" })
-      }
-      showToolbar
-    />
+    <div style={{ width: "100%" }}>
+      <style>
+        {`
+          .wrap-cell {
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            line-height: 1.4;
+            align-items: flex-start !important;
+            display: flex;
+            min-height: 40px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+          }
+        `}
+      </style>
+      <DataGrid
+        rows={routes}
+        columns={columns}
+        autoHeight
+        checkboxSelection
+        disableRowSelectionOnClick
+        editMode="row"
+        processRowUpdate={async (newRow) => {
+          await onEditRow(newRow)
+          return newRow
+        }}
+        onProcessRowUpdateError={(err) =>
+          setSnackbar({ open: true, message: `Edit failed: ${err}`, severity: "error" })
+        }
+        showToolbar
+        getRowHeight={() => 'auto'}
+      />
+    </div>
   )
 }
